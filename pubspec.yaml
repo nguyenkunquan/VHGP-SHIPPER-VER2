@@ -55,6 +55,7 @@ dependencies:
   intl: ^0.18.1
   fluttertoast: ^8.1.1
   firebase_messaging_web: ^3.5.15
+  audioplayers: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +92,7 @@ flutter:
     - assets/images/success-back2.png
     - assets/lottie/success.json
     - assets/lottie/loading-circle.json
+    - assets/audio/ding_126626.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

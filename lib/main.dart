@@ -1,15 +1,13 @@
-import 'dart:developer';
-
+// ignore: depend_on_referenced_packages
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 // ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
+import 'package:vhgp_deli/local_notifications.dart';
 
-// ignore: depend_on_referenced_packages
-import 'package:firebase_auth/firebase_auth.dart';
 import 'Colors/color.dart';
 import 'Json/constrain.dart';
 import 'apis/apiServices.dart';
@@ -28,6 +26,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LocalNotifications.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

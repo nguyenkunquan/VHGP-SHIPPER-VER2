@@ -259,7 +259,7 @@ class ApiServices {
       print(orderActionId);
       print(shipperId);
       print(actionType);
-      var response = await http.put(
+      var response = await http.patch(
         Uri.parse(
             '$baseURL/orders/complete?orderActionId=$orderActionId&shipperId=$shipperId&actionType=$actionType'),
       );
@@ -284,7 +284,7 @@ class ApiServices {
     var body;
     try {
       print('orderCancel');
-      var response = await http.put(
+      var response = await http.patch(
         Uri.parse(
             '${baseURL}/orders/cancel?orderActionId=${orderActionId}&shipperId=${shipperId}&actionType=${actionType}&messageFail=${message}'),
       );
@@ -306,7 +306,7 @@ class ApiServices {
     try {
       print('putDriver');
       Map<String, String> headers = {"Content-type": "application/json"};
-      var response = await http.put(
+      var response = await http.patch(
           Uri.parse('${baseURL}/${SHIP}/${"shippers"}/${id}?imgUpdate=false'),
           headers: headers,
           body: convert.jsonEncode({

@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../Colors/color.dart';
 import '../apis/apiServices.dart';
@@ -31,6 +31,9 @@ class _ListOrderAceeptPageState extends State<ListOrderAceeptPage>
   late int tabStatus = 0;
   late Timer _timer;
 
+  static final FlutterLocalNotificationsPlugin
+      _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   @override
   void initState() {
     ApiServices.getListRoutes().then((value) => {
@@ -45,13 +48,19 @@ class _ListOrderAceeptPageState extends State<ListOrderAceeptPage>
     super.initState();
   }
 
-  void startCountdown() {
-    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+  Future<void> startCountdown() async {
+    // SystemSound.play(SystemSoundType.alert);
+
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       ApiServices.getListRoutes().then((value) => {
             if (value != null)
               {
                 listRoute = value,
+
+                // print(listRoute),
                 _productsController.add(listRoute),
+                if( listRoute.any((element) => element.status==1))
+                AudioPlayer().play(AssetSource('audio/ding_126626.mp3'))
               }
           });
     });
