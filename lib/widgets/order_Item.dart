@@ -562,7 +562,8 @@ class _OrderItemState extends State<OrderItem> {
                                           fontSize: 16),
                                     ),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Color.fromRGBO(230, 230, 230, 1),
+                                      backgroundColor:
+                                          Color.fromRGBO(230, 230, 230, 1),
                                       textStyle: TextStyle(color: Colors.black),
                                       shadowColor: Colors.white,
                                       shape: RoundedRectangleBorder(
@@ -606,7 +607,7 @@ class _OrderItemState extends State<OrderItem> {
                                                 fontSize: 15),
                                           ),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Colors.transparent,
+                                      backgroundColor: Colors.transparent,
                                       textStyle: TextStyle(color: Colors.white),
                                       shadowColor: Colors.transparent,
                                       shape: RoundedRectangleBorder(
@@ -1512,7 +1513,7 @@ class _OrderItemState extends State<OrderItem> {
                                         fontSize: 15),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary: MaterialColors.white,
+                                    backgroundColor: MaterialColors.white,
                                     textStyle: TextStyle(
                                         color: MaterialColors.primary),
                                     shadowColor: Colors.white,
@@ -1558,7 +1559,7 @@ class _OrderItemState extends State<OrderItem> {
                                             fontSize: 15),
                                       ),
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.transparent,
+                                  backgroundColor: Colors.transparent,
                                   textStyle: TextStyle(color: Colors.black),
                                   shadowColor: Colors.transparent,
                                   shape: RoundedRectangleBorder(

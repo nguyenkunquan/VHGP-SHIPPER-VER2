@@ -692,7 +692,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                               fontSize: 16),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
+                          backgroundColor: Colors.white,
                           textStyle: TextStyle(color: Colors.black),
                           shadowColor: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -717,7 +717,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                               fontSize: 16),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary: MaterialColors.primary,
+                          backgroundColor: MaterialColors.primary,
                           textStyle: TextStyle(color: Colors.white),
                           shadowColor: Colors.white,
                           shape: RoundedRectangleBorder(

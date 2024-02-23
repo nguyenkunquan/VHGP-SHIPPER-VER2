@@ -421,7 +421,7 @@ class _RouteDetailPageState extends State<RouteDetailPage>
                           fontSize: 16),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Color.fromRGBO(56, 193, 114, 1),
+                      backgroundColor: Color.fromRGBO(56, 193, 114, 1),
                       textStyle: TextStyle(color: Colors.white),
                       shadowColor: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -548,7 +548,7 @@ class _RouteDetailPageState extends State<RouteDetailPage>
                               fontSize: 16),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary: Color.fromRGBO(239, 81, 58, 1),
+                          backgroundColor: Color.fromRGBO(239, 81, 58, 1),
                           textStyle: TextStyle(color: Colors.white),
                           shadowColor: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -920,7 +920,7 @@ class _RouteDetailPageState extends State<RouteDetailPage>
                               fontSize: 16),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.transparent,
+                          backgroundColor: Colors.transparent,
                           textStyle: TextStyle(color: Colors.black),
                           shadowColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
