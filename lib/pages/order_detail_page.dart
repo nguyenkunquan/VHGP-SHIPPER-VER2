@@ -182,7 +182,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       fontSize: 16),
                                 ),
                                 style: ElevatedButton.styleFrom(
-                                  primary: MaterialColors.primary,
+                                  backgroundColor: MaterialColors.primary,
                                   textStyle: TextStyle(color: Colors.black),
                                   shadowColor: Colors.white,
                                   shape: RoundedRectangleBorder(
