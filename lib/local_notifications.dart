@@ -25,7 +25,6 @@ class LocalNotifications {
     );
   }
 
-  
   // show a simple notification
   static Future showSimpleNotification({
     required String title,
@@ -40,7 +39,7 @@ class LocalNotifications {
       priority: Priority.high,
       ticker: 'ticker',
       sound: RawResourceAndroidNotificationSound(
-          'assets/audio/ding-126626.mp3'), // Add this line
+          'assets/audio/Bo.mp3'), // Add this line
     );
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
