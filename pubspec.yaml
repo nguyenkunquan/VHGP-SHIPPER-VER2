@@ -56,6 +56,9 @@ dependencies:
   fluttertoast: ^8.1.1
   firebase_messaging_web: ^3.5.15
   audioplayers: ^5.2.1
+  geolocator: ^7.6.2
+  http: ^0.13.3
+  ansicolor: ^2.0.2
 
 dev_dependencies:
   flutter_test:

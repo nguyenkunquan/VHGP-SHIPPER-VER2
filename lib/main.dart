@@ -16,6 +16,7 @@ import 'models/DriverModel.dart';
 import 'pages/app.dart';
 import 'pages/login_screen.dart';
 import 'provider/appProvider.dart';
+import './nguyenkunquan/myapp.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
@@ -55,7 +56,9 @@ void main() async {
       //theme: kDarkTheme,
       theme: kLightTheme,
 
-      home: LandingScreen(),
+      home: MyApp(
+        child: LandingScreen(),
+      ),
       //home: OrderPage(),
     ),
   ));
@@ -63,6 +66,8 @@ void main() async {
 
 class LandingScreen extends StatelessWidget {
   FirebaseAuth auth = FirebaseAuth.instance;
+
+  LandingScreen({super.key});
   checkUserAuth() async {
     try {
       User user = auth.currentUser!;
@@ -89,7 +94,7 @@ class LandingScreen extends StatelessWidget {
                   context.read<AppProvider>().setStatus(driverModel.status!),
 
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => RootApp()))
+                      MaterialPageRoute(builder: (context) => const RootApp()))
                   // context.read<AppProvider>().setName(store.name)
                 })
             .catchError((onError) => {print(onError)});
@@ -102,7 +107,7 @@ class LandingScreen extends StatelessWidget {
       }
     });
 
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(color: MaterialColors.primary),
       ),
