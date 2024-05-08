@@ -1506,6 +1506,33 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                             ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(''),
+                                Text(
+                                  "Bật/Tắt trạng thái",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "SF Bold",
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                Switch(
+                                  value:
+                                      context.watch<AppProvider>().isSwitched,
+                                  onChanged: (bool newValue) {
+                                    context
+                                        .read<AppProvider>()
+                                        .toogleSwitch(newValue);
+                                  },
+                                  activeTrackColor: Colors.white30,
+                                  activeColor: Colors.green,
+                                  inactiveThumbColor: Colors.grey,
+                                  inactiveTrackColor: Colors.white30,
+                                )
+                              ],
+                            )
                             // Row(
                             //   crossAxisAlignment: CrossAxisAlignment.center,
                             //   mainAxisAlignment: MainAxisAlignment.center,

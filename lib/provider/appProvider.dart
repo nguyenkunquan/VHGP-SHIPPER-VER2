@@ -9,6 +9,7 @@ class AppProvider with ChangeNotifier {
   String avatar = "";
   late DriverModel driverModel = DriverModel();
   bool status = false;
+  bool _isSwitched = false;
 
   void setStatus(String status) {
     status = status;
@@ -45,10 +46,16 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void toogleSwitch(bool value) {
+    _isSwitched = value;
+    notifyListeners();
+  }
+
   bool get getStatus => status;
   String get getUserId => userId;
   String get getAvatar => avatar;
   String get getUid => uid;
   String get getName => name;
   DriverModel get getDriverModel => driverModel;
+  bool get isSwitched => _isSwitched;
 }
