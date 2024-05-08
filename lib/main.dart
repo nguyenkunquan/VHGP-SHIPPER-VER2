@@ -16,7 +16,7 @@ import 'models/DriverModel.dart';
 import 'pages/app.dart';
 import 'pages/login_screen.dart';
 import 'provider/appProvider.dart';
-import './nguyenkunquan/myapp.dart';
+import './ojt/myapp.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
