@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import 'package:vhgp_deli/provider/appProvider.dart';
 import './apiServices.dart'; // Assuming this is where your sendLocation function is defined
 
 class MyApp extends StatefulWidget {
@@ -18,8 +20,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
-      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      await ApiServices.sendLocation(position.latitude, position.longitude);
+      if (Provider.of<AppProvider>(context, listen: false).isSwitched) {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        await ApiServices.sendLocation(position.latitude, position.longitude);
+      }
     });
   }
 
