@@ -20,11 +20,12 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      print(Provider.of<AppProvider>(context, listen: false).isSwitched);
       if (Provider.of<AppProvider>(context, listen: false).isSwitched) {
         Position position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
         await ApiServices.sendLocation(position.latitude, position.longitude);
-      }
+      } else ApiServices.removeLocation();
     });
   }
 
