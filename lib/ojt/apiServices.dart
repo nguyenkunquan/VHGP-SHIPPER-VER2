@@ -11,7 +11,7 @@ class ApiServices {
     print(pen('User ID: ${user!.email}'));
     print(pen('sendLocation function called'));
     print(pen('Sending location: $latitude, $longitude'));
-    var url = Uri.parse('http://vhgp-api.vhgp.net/api/locations');
+    var url = Uri.parse('http://vhgp-api.vhgp.net/api/Shipper/AddRedis');
     var response = await http.post(
     url,
     headers: {"Content-Type": "application/json"},
@@ -29,7 +29,7 @@ class ApiServices {
   static Future<void> removeLocation() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
-    var url = Uri.parse('http://vhgp-api.vhgp.net/api/locations/${user!.email}');
+    var url = Uri.parse('http://vhgp-api.vhgp.net/api/Shipper/RemoveRedis/${user!.email}');
     var response = await http.delete(url);
     if (response.statusCode != 200) {
       throw Exception('Failed to remove location');
