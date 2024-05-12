@@ -22,7 +22,7 @@ class ApiServices {
     }),
   );
     if (response.statusCode != 200) {
-      throw Exception('Failed to update location');
+      throw Exception('Failed to update location ${response.statusCode} ${response.body}');
     }
   }
   
@@ -31,6 +31,7 @@ class ApiServices {
     User? user = auth.currentUser;
     var url = Uri.parse('http://vhgp-api.vhgp.net/api/Shipper/RemoveRedis/${user!.email}');
     var response = await http.delete(url);
+    print(response);
     if (response.statusCode != 200) {
       throw Exception('Failed to remove location');
     }
