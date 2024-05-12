@@ -72,3 +72,10 @@ flutter {
 dependencies {
   coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "${project(':background_fetch').projectDir}/libs" }
+     }
+}
