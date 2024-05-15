@@ -948,7 +948,9 @@ PODS:
   - abseil/xcprivacy (1.20240116.2)
   - audioplayers_darwin (0.0.1):
     - Flutter
-  - background_fetch (1.3.4):
+  - background_location (0.0.1):
+    - Flutter
+  - background_locator_2 (0.0.1):
     - Flutter
   - BoringSSL-GRPC (0.0.32):
     - BoringSSL-GRPC/Implementation (= 0.0.32)
@@ -1171,7 +1173,8 @@ PODS:
 
 DEPENDENCIES:
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
-  - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
+  - background_location (from `.symlinks/plugins/background_location/ios`)
+  - background_locator_2 (from `.symlinks/plugins/background_locator_2/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -1214,8 +1217,10 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   audioplayers_darwin:
     :path: ".symlinks/plugins/audioplayers_darwin/ios"
-  background_fetch:
-    :path: ".symlinks/plugins/background_fetch/ios"
+  background_location:
+    :path: ".symlinks/plugins/background_location/ios"
+  background_locator_2:
+    :path: ".symlinks/plugins/background_locator_2/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   firebase_auth:
@@ -1244,7 +1249,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
-  background_fetch: d9364ca3f4ba37343c4ac1e8c24d4f4a93cb9ceb
+  background_location: 1b80c1fe3abd9912bca298618f6e365abf6f588f
+  background_locator_2: bc8a422343ab656d5bd98e08694c6f89fef20418
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
   cloud_firestore: 9b25b77371a845d07a48e5146799f6d4552f5940
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06

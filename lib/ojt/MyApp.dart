@@ -54,24 +54,24 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   //   }
   // }
 
-Timer? locationTimer;
-void sendRedisLocationApi() {
-  if (Provider.of<AppProvider>(context, listen: false).isSwitched) {
-    print("Applifecyclestate: $_notification");
-    BackgroundLocation.startLocationService().then((value) {
-      locationTimer = Timer.periodic(Duration(seconds: 3), (timer) async {
-        var location = await BackgroundLocation().getCurrentLocation();
-        ApiServices.sendLocation(location.latitude!, location.longitude!);
+  Timer? locationTimer;
+  void sendRedisLocationApi() {
+    if (Provider.of<AppProvider>(context, listen: false).isSwitched) {
+      print("Applifecyclestate: $_notification");
+      BackgroundLocation.startLocationService().then((value) {
+        locationTimer = Timer.periodic(Duration(seconds: 3), (timer) async {
+          var location = await BackgroundLocation().getCurrentLocation();
+          ApiServices.sendLocation(location.latitude!, location.longitude!);
+        });
       });
-    });
-  } else {
-    locationTimer?.cancel();
-    BackgroundLocation.stopLocationService();
-    ApiServices.removeLocation().catchError((e) {
-      print('Error removing location: $e');
-    });
+    } else {
+      locationTimer?.cancel();
+      BackgroundLocation.stopLocationService();
+      ApiServices.removeLocation().catchError((e) {
+        print('Error removing location: $e');
+      });
+    }
   }
-}
 
   @override
   void dispose() {
@@ -89,15 +89,37 @@ void sendRedisLocationApi() {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print('AppLifecycleState: $state');
+
     // inactive: không dùng app nhưng chưa chuyển sang app khác
     // paused: đang ở app khác
     // hidden khá giống paused
     // resumed: quay lại app
     // detached: app bị kill
+
     _notification = state; // Update the state
     if (state == AppLifecycleState.detached) {
       print('Remove redis location');
-      ApiServices.removeLocation();
+      try {
+        ApiServices.removeLocation();
+      } catch (e) {
+        print('Error removing location: $e');
+      }
     }
+    // super.didChangeAppLifecycleState(state);
+
+    // switch (state) {
+    //   case AppLifecycleState.detached:
+    //     print('Remove redis location');
+    //     try {
+    //       ApiServices.removeLocation();
+    //     } catch (e) {
+    //       print('Error removing location: $e');
+    //     }
+    //     break;
+    //   case AppLifecycleState.inactive:
+    //   case AppLifecycleState.paused:
+    //   case AppLifecycleState.hidden:
+    //   case AppLifecycleState.resumed:
+    // }
   }
 }
