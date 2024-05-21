@@ -17,7 +17,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   late Timer _timer;
   AppLifecycleState? _notification;
-
   @override
   void initState() {
     super.initState();
