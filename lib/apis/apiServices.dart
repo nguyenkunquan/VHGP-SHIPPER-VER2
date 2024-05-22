@@ -144,7 +144,7 @@ class ApiServices {
 
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/routes/d2292b46-0bc4-43d0-b5b4-26f1e8dce400
   static Future<dynamic> getEdgeDetail(
-    String id,
+    num id,
   ) async {
     print('getEdgeDetail');
     var messageEdgeModel = Completer<MessageEdgeModel>();
@@ -249,7 +249,7 @@ class ApiServices {
 
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/orders/complete?orderActionId=1&shipperId=2&actionType=3
   static Future<dynamic> orderComplete(
-    String orderActionId,
+    num orderActionId,
     String shipperId,
     num actionType,
   ) async {

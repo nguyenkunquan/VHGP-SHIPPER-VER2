@@ -30,7 +30,7 @@ class OrderItem extends StatefulWidget {
   String phone;
   String name;
   String shipperId;
-  String orderActionId;
+  num orderActionId;
   num paymentType;
   num statusEdge;
   List<OrderEdgeModel> orderEdgeList;
@@ -93,7 +93,7 @@ class _OrderItemState extends State<OrderItem> {
   }
 
   hanldeComplte(
-      num index, String orderActionId, String shipperId, num actionType) {
+      num index, num orderActionId, String shipperId, num actionType) {
     MessageEdgeModel messageEdgeModel;
     setState(() {
       isLoadingButton = true;
@@ -127,7 +127,7 @@ class _OrderItemState extends State<OrderItem> {
             });
   }
 
-  hanldeCancel(num index, String orderActionId, String shipperId,
+  hanldeCancel(num index, num orderActionId, String shipperId,
       num actionType, String message) {
     // setState(() {
     //   isLoadingButtonCancelDialog = true;
@@ -138,7 +138,7 @@ class _OrderItemState extends State<OrderItem> {
     widget.callbackCancel(index, orderActionId, shipperId, actionType, message);
   }
 
-  hanldeComplteDialog(num index, mystate, String orderActionId,
+  hanldeComplteDialog(num index, mystate, num orderActionId,
       String shipperId, num actionType) {
     mystate(() {
       // widget.orderEdgeList[index].actionStatus = 2;
@@ -193,7 +193,7 @@ class _OrderItemState extends State<OrderItem> {
     num shipCost,
     num segment,
     String shipperId,
-    String orderActionId,
+    num orderActionId,
     num paymentType,
   ) {
     getMessageAction(action) {
@@ -822,7 +822,7 @@ class _OrderItemState extends State<OrderItem> {
     }
   }
 
-  dialogOrder(index, String orderActionId, String shipperId, num actionType) {
+  dialogOrder(index, num orderActionId, String shipperId, num actionType) {
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -1087,7 +1087,7 @@ class _OrderItemState extends State<OrderItem> {
   //       });
   // }
 
-  dialogConfirmOrder(num index, String orderActionId, String shipperId,
+  dialogConfirmOrder(num index, num orderActionId, String shipperId,
       num actionType, String message) {
     return Dialogs.materialDialog(
         dialogShape: RoundedRectangleBorder(
