@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class OrderEdgeModel {
   String? orderId;
-  String? actionId;
+  num? actionId;
   String? name;
   String? note;
   String? phone;

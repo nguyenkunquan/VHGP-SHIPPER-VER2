@@ -11,7 +11,7 @@ import '../widgets/order_store.dart';
 
 class OrderDetailPage extends StatefulWidget {
   String alphabet;
-  String edgeId;
+  num edgeId;
   String building;
   num statusEdge;
   OrderDetailPage(
@@ -41,7 +41,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     }
   }
 
-  hanldeGetEdgeDetail(String edgeId) {
+  hanldeGetEdgeDetail(num edgeId) {
     ApiServices.getEdgeDetail(edgeId)
         .then((value) => {
               messageEdgeModel = value,

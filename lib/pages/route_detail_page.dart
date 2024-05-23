@@ -315,6 +315,10 @@ class _RouteDetailPageState extends State<RouteDetailPage>
     String statusCode = "";
     ApiServices.postAcceptRoute(routeId, shipId)
         .then((value) => {
+          setState(() {
+            isLoadingSubmit = false;
+            widget.status = 2;
+          }),
               statusCode = value,
               if (statusCode == "Successful")
                 {
@@ -452,6 +456,9 @@ class _RouteDetailPageState extends State<RouteDetailPage>
     var isTodo = false;
     ApiServices.getListEdge(id)
         .then((value) => {
+          setState(() {
+            isLoading = false;
+          }),
               messageEdgeModel = value,
               if (messageEdgeModel.statusCode == "Successful")
                 {
@@ -871,13 +878,14 @@ class _RouteDetailPageState extends State<RouteDetailPage>
                       action: (controller) async {
                         controller.loading(); //starts loading animation
                         Future.delayed(
-                          const Duration(milliseconds: 200),
+                          Duration(milliseconds: 200),
                           () => {
                             // Navigator.pop(context),
 
                             hanldeAcceptRoute(widget.routeId, shipperId)
                           },
                         );
+                        // await hanldeAcceptRoute(widget.routeId, shipperId);
                         controller.success(); //starts success animation
                       },
                       child: const Text(

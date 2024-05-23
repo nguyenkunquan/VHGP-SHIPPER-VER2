@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class EdgeModel {
-  String? id;
-  String? buildingId;
+  num? id;
+  num? buildingId;
   String? buildingName;
   num? orderNum;
   num? priority;
