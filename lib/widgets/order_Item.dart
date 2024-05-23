@@ -26,7 +26,8 @@ class OrderItem extends StatefulWidget {
   num total;
   num shipCost;
   List listProduct;
-  String note;
+  String customerNote;
+  String orderNote;
   String phone;
   String name;
   String shipperId;
@@ -47,7 +48,8 @@ class OrderItem extends StatefulWidget {
     required this.total,
     required this.shipCost,
     required this.listProduct,
-    required this.note,
+    required this.customerNote,
+    required this.orderNote,
     required this.phone,
     required this.name,
     required this.shipperId,
@@ -186,7 +188,8 @@ class _OrderItemState extends State<OrderItem> {
     index,
     orderStatus,
     List listProduct,
-    String note,
+    String customerNote,
+    String orderNote,
     String phone,
     String name,
     num total,
@@ -318,9 +321,11 @@ class _OrderItemState extends State<OrderItem> {
                                 ),
                               ],
                             ),
+                          
                             SizedBox(
                               height: 10,
                             ),
+                            
                             Row(
                               children: [
                                 Expanded(
@@ -336,12 +341,63 @@ class _OrderItemState extends State<OrderItem> {
                                           minHeight: 32,
                                         ),
                                         child: Text(
-                                          note == "" ? "Không có" : note,
+                                          customerNote == "" ? "Không có" : customerNote,
                                           style: const TextStyle(
                                               color: MaterialColors.black,
                                               fontFamily: "SF Medium",
                                               fontSize: 16),
                                         ),
+                                        
+                                      )),
+                                )
+                              ],
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 15, bottom: 15),
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      top: BorderSide(
+                                          color: Color.fromRGBO(
+                                              230, 230, 230, 1)))),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Ghi chú đơn hàng",
+                                  style: const TextStyle(
+                                      color: Color.fromRGBO(150, 150, 150, 1),
+                                      fontFamily: "SF Regular",
+                                      fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          
+                            SizedBox(
+                              height: 10,
+                            ),
+                            
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(240, 240, 240, 1),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          minHeight: 32,
+                                        ),
+                                        child: Text(
+                                          orderNote == "" ? "Không có" : orderNote,
+                                          style: const TextStyle(
+                                              color: MaterialColors.black,
+                                              fontFamily: "SF Medium",
+                                              fontSize: 16),
+                                        ),
+                                        
                                       )),
                                 )
                               ],
@@ -1480,7 +1536,8 @@ class _OrderItemState extends State<OrderItem> {
                                     widget.index,
                                     widget.status,
                                     widget.listProduct,
-                                    widget.note,
+                                    widget.customerNote,
+                                    widget.orderNote,
                                     widget.phone,
                                     widget.name,
                                     widget.total,

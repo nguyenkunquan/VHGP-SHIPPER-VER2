@@ -7,7 +7,8 @@ class HistoryDetailModel {
   String? end;
   String? endBuilding;
   String? phone;
-  String? note;
+  String? customerNote;
+  String? orderNote;
   String? serviceName;
   num? total;
   num? shipCost;
@@ -24,7 +25,8 @@ class HistoryDetailModel {
     this.total,
     this.shipCost,
     this.phone,
-    this.note,
+    this.customerNote,
+    this.orderNote,
     this.paymentType,
     this.orderDetails,
   });
@@ -39,7 +41,8 @@ class HistoryDetailModel {
       end: json['end'],
       endBuilding: json['endBuilding'],
       phone: json['phone'],
-      note: json['note'],
+      customerNote: json['customerNote'],
+      orderNote: json['orderNote'],
       paymentType: json['paymentType'],
       orderDetails: json['orderDetails'],
       total: json['total'] != null ? json['total'] : 0,

@@ -481,6 +481,17 @@ class _ListOrderPageState extends State<ListOrderPage> {
               ),
             ],
           ),
+          Row(
+            children: [
+              Text(
+                "Ghi chú đơn hàng",
+                style: const TextStyle(
+                    color: Color.fromRGBO(150, 150, 150, 1),
+                    fontFamily: "SF Regular",
+                    fontSize: 16),
+              ),
+            ],
+          ),
           SizedBox(
             height: 10,
           ),

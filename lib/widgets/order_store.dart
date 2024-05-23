@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -390,7 +391,8 @@ class _OrderStoreState extends State<OrderStore> {
                                 total: item.total!,
                                 shipCost: item.shipCost!,
                                 listProduct: item.orderDetailActions!,
-                                note: item.note!,
+                                customerNote: item.customerNote!,
+                                orderNote: item.orderNote!,
                                 phone: item.phone ?? "",
                                 name: item.name!,
                                 shipperId: shipperId,

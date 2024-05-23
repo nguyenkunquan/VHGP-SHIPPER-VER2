@@ -181,7 +181,8 @@ class _HistoryDetailPageState extends State<HistoryDetailPage> {
                           end: messageEdgeModelHistory.data["end"],
                           endBuilding:
                               messageEdgeModelHistory.data["endBuilding"],
-                          note: messageEdgeModelHistory.data["note"],
+                          customerNote: messageEdgeModelHistory.data["customerNote"],
+                          orderNote: messageEdgeModelHistory.data["orderNote"],
                           orderDetails:
                               messageEdgeModelHistory.data["orderDetails"],
                           paymentType:

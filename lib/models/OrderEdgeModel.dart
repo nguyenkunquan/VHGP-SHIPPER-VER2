@@ -4,7 +4,8 @@ class OrderEdgeModel {
   String? orderId;
   num? actionId;
   String? name;
-  String? note;
+  String? customerNote;
+  String? orderNote;
   String? phone;
   String? serviceName;
   num? paymentType;
@@ -19,7 +20,8 @@ class OrderEdgeModel {
       this.actionId,
       this.name,
       this.paymentType,
-      this.note,
+      this.customerNote,
+      this.orderNote,
       this.phone,
       this.serviceName,
       this.total,
@@ -33,7 +35,8 @@ class OrderEdgeModel {
       orderId: json['orderId'],
       actionId: json['actionId'],
       name: json['name'],
-      note: json['note'],
+      customerNote: json['customerNote'],
+      orderNote: json['orderNote'],
       phone: json['phone'],
       serviceName: json['serviceName'],
       paymentType: json['paymentType'],
