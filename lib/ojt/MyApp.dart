@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:vhgp_deli/provider/appProvider.dart';
-import './apiServices.dart'; // Assuming this is where your sendLocation function is defined
+import './apis/apiServices.dart'; // Assuming this is where your sendLocation function is defined
 import 'package:background_location/background_location.dart';
 
 class MyApp extends StatefulWidget {
@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   //     print("uk thi anh chiu thua em rau");
   //     Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high) // Geolocator.getCurrentPosition function may not work when the app is in the background
   //         .then((Position position) {
-  //       ApiServices.sendLocation(position.latitude, position.longitude)
+  //       ApiServices2.sendLocation(position.latitude, position.longitude)
   //           .catchError((e) {
   //         print('Error sending location: $e');
   //       });
@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   //       print('Error getting location: $e');
   //     });
   //   } else {
-  //     ApiServices.removeLocation().catchError((e) {
+  //     ApiServices2.removeLocation().catchError((e) {
   //       print('Error removing location: $e');
   //     });
   //   }
@@ -61,13 +61,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       BackgroundLocation.startLocationService().then((value) {
         locationTimer = Timer.periodic(Duration(seconds: 3), (timer) async {
           var location = await BackgroundLocation().getCurrentLocation();
-          ApiServices.sendLocation(location.latitude!, location.longitude!);
+          ApiServices2.sendLocation(location.latitude!, location.longitude!);
         });
       });
     } else {
       locationTimer?.cancel();
       BackgroundLocation.stopLocationService();
-      ApiServices.removeLocation().catchError((e) {
+      ApiServices2.removeLocation().catchError((e) {
         print('Error removing location: $e');
       });
     }
@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (state == AppLifecycleState.detached) {
       print('Remove redis location');
       try {
-        ApiServices.removeLocation();
+        ApiServices2.removeLocation();
       } catch (e) {
         print('Error removing location: $e');
       }
@@ -111,7 +111,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     //   case AppLifecycleState.detached:
     //     print('Remove redis location');
     //     try {
-    //       ApiServices.removeLocation();
+    //       ApiServices2.removeLocation();
     //     } catch (e) {
     //       print('Error removing location: $e');
     //     }
