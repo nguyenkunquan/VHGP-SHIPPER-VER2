@@ -679,7 +679,7 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     children: [
                       Text(
-                        "Tổng quan thu tiền  ",
+                        "Tổng quan thu tiền",
                         style: TextStyle(
                             color: Color.fromARGB(255, 0, 0, 0),
                             fontFamily: "SF Bold",
@@ -711,7 +711,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Container(
                                       child: Text(
-                                        '400.000 đ',
+                                        '${totalOrderCost} đ',
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontFamily: "SF Bold",
@@ -845,7 +845,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Container(
                                       child: Text(
-                                        '200.000 VND',
+                                        '${totalShipCost} đ',
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontFamily: "SF Bold",
@@ -1299,6 +1299,8 @@ class _HomePageState extends State<HomePage> {
   int totalSuccess = 0;
   int totalFail = 0;
   int totalCusFail = 0;
+  int totalOrderCost = 0;
+  int totalShipCost = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -1347,6 +1349,8 @@ class _HomePageState extends State<HomePage> {
                                       messageEdgeModel.data["customerFail"],
                                   isLoading = false,
                                   isLoadingFilter = false,
+                                  totalOrderCost= messageEdgeModel.data["totalOrderCost"],
+                                  totalShipCost = messageEdgeModel.data["totalShipCost"],
                                 })
                           }
                         else
@@ -1407,6 +1411,8 @@ class _HomePageState extends State<HomePage> {
                                       messageEdgeModel.data["customerFail"],
                                   isLoading = false,
                                   isLoadingFilter = false,
+                                  totalOrderCost= messageEdgeModel.data["totalOrderCost"],
+                                  totalShipCost = messageEdgeModel.data["totalShipCost"],
                                 })
                           }
                         else
@@ -1439,6 +1445,8 @@ class _HomePageState extends State<HomePage> {
                         totalSuccess = messageEdgeModel.data["success"],
                         totalFail = messageEdgeModel.data["canceled"],
                         totalCusFail = messageEdgeModel.data["customerFail"],
+                        totalOrderCost = messageEdgeModel.data["totalOrderCost"],
+                        totalShipCost = messageEdgeModel.data["totalShipCost"],
                         isLoadingFilter = false,
                       })
                 }
