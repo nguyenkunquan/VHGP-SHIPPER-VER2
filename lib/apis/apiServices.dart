@@ -211,6 +211,7 @@ class ApiServices {
       }
       var response = await http.get(
         Uri.parse('${baseURL}/shippers/${id}/report?${url}'),
+        //Uri.parse('https://api.vhgp.net/api/v1/shippers/an%40gmail.com/report?DateFilter=2024-05-22')
       );
       body = convert.jsonDecode(response.body);
       messageEdgeModel.complete(MessageEdgeModelHistory.fromJson(body));
