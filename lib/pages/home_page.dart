@@ -1312,7 +1312,7 @@ class _HomePageState extends State<HomePage> {
     String actualDate = formatterDate.format(now);
     String actualMonth = formatterMonth.format(now);
     String actualYear = formatterYear.format(now);
-    String dayFilter = "${actualMonth}/${actualDate}/${actualYear}";
+    String dayFilter = "${actualYear}-${actualMonth}-${actualDate}";
     ApiServices.getCurrentJob(shipperId)
         .then((value) => {
               if (value != null)
@@ -1330,6 +1330,8 @@ class _HomePageState extends State<HomePage> {
                 }
             })
         .then((value) => {
+              print("shipperId: " + shipperId),
+              print("dayFilter: " + dayFilter),
               ApiServices.getReportOrder(shipperId, dayFilter, "", "")
                   .then((value2) => {
                         if (value2 != null)
