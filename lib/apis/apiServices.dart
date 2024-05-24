@@ -280,7 +280,7 @@ class ApiServices {
   }
 
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/orders/cancel?orderActionId=1&shipperId=1&actionType=1&messageFail=1
-  static Future<dynamic> orderCancel(String orderActionId, String shipperId,
+  static Future<dynamic> orderCancel(num orderActionId, String shipperId,
       num actionType, String message) async {
     var messageEdgeModel = Completer<MessageEdgeModel>();
     var body;

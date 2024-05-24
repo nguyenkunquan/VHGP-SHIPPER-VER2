@@ -68,7 +68,7 @@ class _OrderStoreState extends State<OrderStore> {
     });
   }
 
-  void _cancelListOrder(num index, String orderActionId, String shipperId,
+  void _cancelListOrder(num index, num orderActionId, String shipperId,
       num actionType, String message) {
     setState(() {
       widget.callbackLoading(true);
