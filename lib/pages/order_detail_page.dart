@@ -1,6 +1,10 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../Colors/color.dart';
 import '../Json/constrain.dart';
@@ -31,6 +35,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   List<OrderEdgeModel> orderEdgeList = [];
   bool isLoading = true;
+  File? _image;
+
   Color getColorAppBar(status) {
     if (status == StatusEdge.notyet) {
       return Color.fromRGBO(150, 150, 150, 1);
@@ -65,6 +71,16 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 isLoading = false;
               })
             });
+  }
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    if(pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
   }
 
   @override
@@ -149,7 +165,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 isLoadingButtonCancelDialog = isLoading;
                               });
                             },
-                          )
+                          ),
                         ],
                       ),
                     ),
