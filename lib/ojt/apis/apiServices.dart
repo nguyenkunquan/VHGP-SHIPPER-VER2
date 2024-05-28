@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ansicolor/ansicolor.dart';
@@ -56,7 +58,8 @@ class ApiServices2 {
   }
 
   static Future<void> createOrderDistance(String orderId) async {
-    var url = Uri.parse('http://vhgp-api.vhgp.net/api/order-distances?$orderId');
+    var url =
+        Uri.parse('http://vhgp-api.vhgp.net/api/order-distances?$orderId');
     var response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -67,15 +70,14 @@ class ApiServices2 {
     }
   }
 
-  static Future<void> saveDistanceTracker(String orderId, double latitude, double longitude) async {
-    var url = Uri.parse('http://vhgp-api.vhgp.net/api/order-distances/distance-tracker/$orderId');
+  static Future<void> saveDistanceTracker(
+      String orderId, double latitude, double longitude) async {
+    var url = Uri.parse(
+        'http://vhgp-api.vhgp.net/api/order-distances/distance-tracker/$orderId');
     var response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        'latitude': '$latitude',
-        'longitude': '$longitude'
-      }),
+      body: jsonEncode({'latitude': '$latitude', 'longitude': '$longitude'}),
     );
     if (response.statusCode != 200) {
       throw Exception(
@@ -84,7 +86,8 @@ class ApiServices2 {
   }
 
   static Future<void> terminateOrderDistances(String orderId) async {
-    var url = Uri.parse('http://vhgp-api.vhgp.net/api/order-distances/$orderId');
+    var url =
+        Uri.parse('http://vhgp-api.vhgp.net/api/order-distances/$orderId');
     var response = await http.patch(
       url,
       headers: {"Content-Type": "application/json"},
@@ -95,18 +98,18 @@ class ApiServices2 {
     }
   }
 
-  static Future<void> trackingDistance(String shipperId, double latitude, double longitude) async {
-    shipperId = Uri.encodeComponent(shipperId); // should be URL encoded if it contains special characters like @
+  static Future<void> trackingDistance(
+      String shipperId, double latitude, double longitude) async {
+    shipperId = Uri.encodeComponent(
+        shipperId); // should be URL encoded if it contains special characters like @
     // var url = Uri.parse('https://192.168.1.180:7253/api/shipper-distances/tracking/$shipperId');
     // var url = Uri.parse('https://localhost:7253/api/shipper-distances/tracking/$shipperId');
-    var url = Uri.parse('http://vhgp-api.vhgp.net/api/shipper-distances/tracking/$shipperId');
+    var url = Uri.parse(
+        'http://vhgp-api.vhgp.net/api/shipper-distances/tracking/$shipperId');
     var response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        'latitude': '$latitude',
-        'longitude': '$longitude'
-      }),
+      body: jsonEncode({'latitude': '$latitude', 'longitude': '$longitude'}),
     );
     if (response.statusCode != 200) {
       throw Exception(
@@ -117,7 +120,8 @@ class ApiServices2 {
   static Future<void> stopTrackingDistance(String shipperId) async {
     shipperId = Uri.encodeComponent(shipperId);
     // var url = Uri.parse('https://192.168.1.180:7253/api/shipper-distances/stopping/$shipperId');
-    var url = Uri.parse('http://vhgp-api.vhgp.net/api/shipper-distances/stopping/$shipperId');
+    var url = Uri.parse(
+        'http://vhgp-api.vhgp.net/api/shipper-distances/stopping/$shipperId');
     var response = await http.patch(
       url,
       headers: {"Content-Type": "application/json"},
@@ -128,4 +132,23 @@ class ApiServices2 {
     }
   }
 
+  static Future<double> getTotalDistanceByDate(
+      String shipperId, DateTime request) async {
+    shipperId = Uri.encodeComponent(shipperId);
+    String requestString = Uri.encodeComponent(request.toString());
+    // var url = Uri.parse(
+    //     'http://vhgp-api.vhgp.net/api/shipper-distances/$shipperId?request=$requestString');
+    var url = Uri.parse(
+        'http://vhgp-api.vhgp.net/$shipperId?request=$requestString');
+    print(url);
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to get total distance ${response.statusCode} ${response.body}');
+    }
+    return double.parse(response.body);
+  }
 }

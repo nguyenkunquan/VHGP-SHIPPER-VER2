@@ -19,6 +19,8 @@ import '../widgets/order_accept_modal.dart';
 import '../widgets/order_done_modal.dart';
 import '../widgets/order_shipping_modal.dart';
 import 'order_detail_page.dart';
+import '../ojt/apis/apiServices.dart';
+import '../ojt/globals.dart' as globals;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -87,6 +89,7 @@ class _HomePageState extends State<HomePage> {
 
       String actualDate = formatterDate.format(now);
       String actualMonth = formatterMonth.format(now);
+      print(actualDate + " Tháng " + actualMonth);
       return actualDate + " Tháng " + actualMonth;
     }
   }
@@ -156,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                     String actualYear = formatterYear.format(now);
                     String dayFilter =
                         "${actualMonth}/${actualDate}/${actualYear}";
-
+                    globals.dateOnly = "${actualYear}-${actualMonth}-${actualDate}";
                     print(dayFilter);
                     hanldeFilter(shipperId, dayFilter, "", "");
                   });
@@ -187,6 +190,7 @@ class _HomePageState extends State<HomePage> {
                     String actualYear = formatterYear.format(now);
                     String dayFilter =
                         "${actualMonth}/${actualDate}/${actualYear}";
+                    globals.dateOnly = '${actualYear}-${actualMonth}-${actualDate}';
                     print(dayFilter);
                     hanldeFilter(shipperId, dayFilter, "", "");
                   });
@@ -262,6 +266,7 @@ class _HomePageState extends State<HomePage> {
                                 String actualYear = formatterYear.format(now);
                                 String dayFilter =
                                     "${actualMonth}/${actualDate}/${actualYear}";
+                                globals.dateOnly = '${actualYear}-${actualMonth}-${actualDate}';
                                 hanldeFilter(shipperId, dayFilter, "", "");
                               });
                             },
@@ -319,6 +324,7 @@ class _HomePageState extends State<HomePage> {
                                 String actualYear = formatterYear.format(now);
                                 String dayFilter =
                                     "${actualMonth} ${actualDate} ${actualYear}";
+                                globals.dateOnly = '${actualYear}-${actualMonth}-${actualDate}';
                                 subtractFilter = subtractFilter + 1;
                                 hanldeFilter(shipperId, dayFilter, "", "");
                               });
@@ -800,7 +806,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Container(
                                       child: Text(
-                                        '2000m',
+                                        '${(totalDistanceByDate * 1000).truncate()} m',
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontFamily: "SF Bold",
@@ -1301,6 +1307,7 @@ class _HomePageState extends State<HomePage> {
   int totalCusFail = 0;
   int totalOrderCost = 0;
   int totalShipCost = 0;
+  double totalDistanceByDate = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -1349,8 +1356,10 @@ class _HomePageState extends State<HomePage> {
                                       messageEdgeModel.data["customerFail"],
                                   isLoading = false,
                                   isLoadingFilter = false,
-                                  totalOrderCost= messageEdgeModel.data["totalOrderCost"],
-                                  totalShipCost = messageEdgeModel.data["totalShipCost"],
+                                  totalOrderCost =
+                                      messageEdgeModel.data["totalOrderCost"],
+                                  totalShipCost =
+                                      messageEdgeModel.data["totalShipCost"],
                                 })
                           }
                         else
@@ -1360,6 +1369,23 @@ class _HomePageState extends State<HomePage> {
                             }
                           }
                       })
+            })
+        .then((value) => {
+              globals.dateOnly = '${actualYear}-${actualMonth}-${actualDate}',
+              ApiServices2.getTotalDistanceByDate(
+                      shipperId, DateTime.parse(globals.dateOnly))
+                  .then((value) {
+                if (value != null) {
+                  setState(() {
+                    totalDistanceByDate = value;
+                    isLoading = false;
+                  });
+                } else {
+                  setState(() {
+                    isLoading = false;
+                  });
+                }
+              })
             })
         .catchError((onError) => {
               print("onError: " + onError.toString()),
@@ -1411,8 +1437,10 @@ class _HomePageState extends State<HomePage> {
                                       messageEdgeModel.data["customerFail"],
                                   isLoading = false,
                                   isLoadingFilter = false,
-                                  totalOrderCost= messageEdgeModel.data["totalOrderCost"],
-                                  totalShipCost = messageEdgeModel.data["totalShipCost"],
+                                  totalOrderCost =
+                                      messageEdgeModel.data["totalOrderCost"],
+                                  totalShipCost =
+                                      messageEdgeModel.data["totalShipCost"],
                                 })
                           }
                         else
@@ -1423,6 +1451,22 @@ class _HomePageState extends State<HomePage> {
                           }
                       })
             })
+        .then((value) => {
+              ApiServices2.getTotalDistanceByDate(
+                      shipperId, DateTime.parse(globals.dateOnly))
+                  .then((value) {
+                if (value != null) {
+                  setState(() {
+                    totalDistanceByDate = value;
+                    isLoading = false;
+                  });
+                } else {
+                  setState(() {
+                    isLoading = false;
+                  });
+                }
+              })
+            })
         .catchError((onError) => {
               print("onError: " + onError.toString()),
               setState(() {
@@ -1431,39 +1475,52 @@ class _HomePageState extends State<HomePage> {
             });
   }
 
-  hanldeFilter(shipperId, day, month, year) {
-    {
-      setState(() => {isLoadingFilter = true});
-    }
-    ApiServices.getReportOrder(shipperId, day, month, year)
-        .then((value2) => {
-              if (value2 != null)
-                {
-                  messageEdgeModel = value2,
-                  setState(() => {
-                        totalOrder = messageEdgeModel.data["total"],
-                        totalSuccess = messageEdgeModel.data["success"],
-                        totalFail = messageEdgeModel.data["canceled"],
-                        totalCusFail = messageEdgeModel.data["customerFail"],
-                        totalOrderCost = messageEdgeModel.data["totalOrderCost"],
-                        totalShipCost = messageEdgeModel.data["totalShipCost"],
-                        isLoadingFilter = false,
-                      })
-                }
-              else
-                {
-                  {
-                    setState(() => {isLoadingFilter = false})
-                  }
-                }
-            })
-        .catchError((onError) => {
-              print("onError: " + onError.toString()),
-              setState(() {
-                isLoadingFilter = false;
-              })
+  void hanldeFilter(String shipperId, String day, String month, String year) {
+  setState(() {
+    isLoadingFilter = true;
+  });
+  ApiServices.getReportOrder(shipperId, day, month, year)
+      .then((value2) {
+        if (value2 != null) {
+          messageEdgeModel = value2;
+          setState(() {
+            totalOrder = messageEdgeModel.data["total"];
+            totalSuccess = messageEdgeModel.data["success"];
+            totalFail = messageEdgeModel.data["canceled"];
+            totalCusFail = messageEdgeModel.data["customerFail"];
+            totalOrderCost = messageEdgeModel.data["totalOrderCost"];
+            totalShipCost = messageEdgeModel.data["totalShipCost"];
+            isLoadingFilter = false;
+          });
+        } else {
+          setState(() {
+            isLoadingFilter = false;
+          });
+        }
+      })
+      .then((value) {
+        String dayFilter = "${year}-${month}-${day}";
+        ApiServices2.getTotalDistanceByDate(shipperId, DateTime.parse(globals.dateOnly))
+            .then((value) {
+          if (value != null) {
+            setState(() {
+              totalDistanceByDate = value;
+              isLoading = false;
             });
-  }
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        });
+      })
+      .catchError((onError) {
+        print("onError: " + onError.toString());
+        setState(() {
+          isLoadingFilter = false;
+        });
+      });
+}
 
   @override
   Widget build(BuildContext context) {
