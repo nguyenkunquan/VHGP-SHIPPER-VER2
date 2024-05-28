@@ -1,16 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_dialogs/material_dialogs.dart';
-
+import 'package:image/image.dart' as img;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vhgp_deli/models/OrderCompleteModel.dart';
 
 import '../Colors/color.dart';
 import '../Json/constrain.dart';
@@ -70,7 +73,7 @@ class _OrderItemState extends State<OrderItem> {
   bool isLoadingButtonDialog = false;
 
   num activeRadio = 0;
-    File? _image;
+  File? _image;
 
 
   String activeRadioMessage = "";
@@ -122,40 +125,56 @@ class _OrderItemState extends State<OrderItem> {
     }
   }
 
-  hanldeComplte(
-      num index, num orderActionId, String shipperId, num actionType) {
-    MessageEdgeModel messageEdgeModel;
+  Future<void> hanldeComplte(
+      num index, num orderActionId, String shipperId, num actionType) async {
+    MessageEdgeModel messageEdgeModel;  
+    if(_image == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Vui lòng chọn ảnh"),
+        backgroundColor: Colors.red,
+      ),
+    );
+      return;
+    }
     setState(() {
       isLoadingButton = true;
     });
 
-    var check = false;
+    // var check = false;
 
-    ApiServices.orderComplete(orderActionId, shipperId, actionType)
-        .then((value) => {
-              if (value != null)
-                {
-                  messageEdgeModel = value,
-                  if (messageEdgeModel.statusCode == "Successful")
-                    {
-                      setState(() =>
-                          {widget.callback(index), isLoadingButton = false}),
-                    }
-                  else
-                    {
-                      setState(() => {isLoadingButton = false}),
-                    }
-                }
-              else
-                {
-                  setState(() => {isLoadingButton = false}),
-                }
-            })
-        .catchError((onError) => {
-              print("onError: " + onError.toString()),
-              setState(() => {isLoadingButton = false}),
-            });
+  //  String base64Image = base64Encode(_image!.readAsBytesSync());
+    var base64Image = base64Encode(_image!.readAsBytesSync()); 
+   print(base64Image);
+   var orderCompleteModel = OrderCompleteModel(
+        shipperId: shipperId,
+        actionType: actionType,
+        image: base64Image,
+    );
+    try {
+      var response = await ApiServices.orderComplete(
+        orderActionId,
+        orderCompleteModel,
+      );
+
+      if (response != null && response.statusCode == "Successful") {
+        setState(() {
+          widget.callback(index);
+          isLoadingButton = false;
+        });
+      } else {
+        setState(() {
+          isLoadingButton = false;
+        });
+      }
+    } catch (error) {
+      print("onError: " + error.toString());
+      setState(() {
+        isLoadingButton = false;
+      });
+    }
   }
+    
 
   hanldeCancel(num index, num orderActionId, String shipperId,
       num actionType, String message) {
@@ -167,50 +186,58 @@ class _OrderItemState extends State<OrderItem> {
     // });
     widget.callbackCancel(index, orderActionId, shipperId, actionType, message);
   }
-
-  hanldeComplteDialog(num index, mystate, num orderActionId,
-      String shipperId, num actionType) {
-    mystate(() {
-      // widget.orderEdgeList[index].actionStatus = 2;
-      isLoadingButtonDialog = true;
-    });
-    // new Timer(
-    //     const Duration(seconds: 2),
-    //     () => {
-    //           mystate(() {
-    //             // widget.orderEdgeList[index].actionStatus = 2;
-    //             isLoadingButtonDialog = false;
-    //             Navigator.pop(context);
-    //             widget.callback(index);
-    //           }),
-    //         });
-    MessageEdgeModel messageEdgeModel;
-    ApiServices.orderComplete(orderActionId, shipperId, actionType)
-        .then((value) => {
-              if (value != null)
-                {
-                  messageEdgeModel = value,
-                  if (messageEdgeModel.statusCode == "Successful")
-                    {
-                      setState(() =>
-                          {widget.callback(index), isLoadingButton = false}),
-                    }
-                  else
-                    {
-                      setState(() => {isLoadingButton = false}),
-                    },
-                  Navigator.pop(context),
-                }
-              else
-                {
-                  setState(() => {isLoadingButton = false}),
-                }
-            })
-        .catchError((onError) => {
-              print("onError: " + onError.toString()),
-              setState(() => {isLoadingButton = false}),
-            });
+  Future<void> hanldeComplteDialog(num index, StateSetter mystate, num orderActionId,
+    String shipperId, num actionType) async {
+  if (_image == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Vui lòng chọn ảnh"),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
   }
+
+  mystate(() {
+    isLoadingButtonDialog = true;
+  });
+
+  // Convert image to base64
+  // String base64Image = base64Encode(_image!.readAsBytesSync());
+  var base64Image = base64Encode(_image!.readAsBytesSync()); 
+  print(base64Image);
+  var orderCompleteModel = OrderCompleteModel(
+        shipperId: shipperId,
+        actionType: actionType,
+        image: base64Image,
+    );
+  try {
+    var response = await ApiServices.orderComplete(
+      orderActionId,
+      orderCompleteModel,
+    );
+
+    if (response != null && response.statusCode == "Successful") {
+      mystate(() {
+        widget.callback(index);
+        isLoadingButtonDialog = false;
+      });
+      Navigator.pop(context);
+    } else {
+      mystate(() {
+        isLoadingButtonDialog = false;
+      });
+    }
+  } catch (error) {
+    print("onError: " + error.toString());
+    mystate(() {
+      isLoadingButtonDialog = false;
+    });
+  }
+}
+
+
+  
 
   showModal(
     index,

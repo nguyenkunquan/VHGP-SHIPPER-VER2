@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert' as convert;
 
 import 'package:http/http.dart' as http;
+import 'package:vhgp_deli/models/OrderCompleteModel.dart';
 
 import '../models/DriverModel.dart';
 import '../models/EdgeModel.dart';
@@ -13,6 +14,7 @@ import '../models/orderModel.dart';
 class ApiServices {
   static const baseURL = 'https://api.vhgp.net/api/v1';
   static const SHIP = "shipper-management";
+  static const localURL = "https://127.0.0.1:7102/api/v1/";
 
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/shipper-management/shippers/ByShipId?id=1
   static Future<dynamic> getDriver(
@@ -252,25 +254,34 @@ class ApiServices {
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/orders/complete?orderActionId=1&shipperId=2&actionType=3
   static Future<dynamic> orderComplete(
     num orderActionId,
-    String shipperId,
-    num actionType,
+    OrderCompleteModel orderCompleteModel,
   ) async {
     print('orderComplete');
+    Map<String, String> headers = {"Content-type": "application/json"};
     var messageEdgeModel = Completer<MessageEdgeModel>();
     var body;
     try {
       print(orderActionId);
-      print(shipperId);
-      print(actionType);
+      print(orderCompleteModel.shipperId);
+      print(orderCompleteModel.actionType);
+      // String base64Image = convert.jsonEncode(image);
       var response = await http.patch(
         Uri.parse(
-            '$baseURL/orders/complete?orderActionId=$orderActionId&shipperId=$shipperId&actionType=$actionType'),
+            '$baseURL/orders/complete?orderActionId=$orderActionId'),
+            headers: headers,
+            body: convert.jsonEncode({
+              "shipperId": orderCompleteModel.shipperId,
+              "actionType": orderCompleteModel.actionType,
+              "image": orderCompleteModel.image
+            }),
       );
-      body = convert.jsonDecode(response.body);
-      messageEdgeModel.complete(MessageEdgeModel.fromJson(body));
+      if(response.statusCode == 200){
+        body = convert.jsonDecode(response.body);
+        messageEdgeModel.complete(MessageEdgeModel.fromJson(body));
+      }
       print(response.statusCode.toString() + "status code");
       print(response.body.toString());
-      // List<EdgeModel> edgeList =
+      // List<EdgeModel> edgeLisƒt =
       //       body.map((dynamic item) => EdgeModel.fromJson(item)).toList();
     } catch (e) {
       // messageEdgeModel.complete(MessageEdgeModel.fromJson(body));
