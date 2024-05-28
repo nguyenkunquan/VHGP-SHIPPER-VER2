@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:vhgp_deli/provider/appProvider.dart';
 import './apis/apiServices.dart'; // Assuming this is where your sendLocation function is defined
 import 'package:background_location/background_location.dart';
+import './globals.dart' as globals;
+import './utils/reuseFunc.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -58,17 +60,24 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (Provider.of<AppProvider>(context, listen: false).isSwitched) {
       print("Applifecyclestate: $_notification");
       BackgroundLocation.startLocationService().then((value) {
+        globals.isActive = true;
         locationTimer = Timer.periodic(Duration(seconds: 3), (timer) async {
           var location = await BackgroundLocation().getCurrentLocation();
           ApiServices2.sendLocation(location.latitude!, location.longitude!);
+          ApiServices2.trackingDistance(
+              getUserId(), location.latitude!, location.longitude!);
         });
       });
     } else {
       locationTimer?.cancel();
       BackgroundLocation.stopLocationService();
-      ApiServices2.removeLocation().catchError((e) {
-        print('Error removing location: $e');
-      });
+      if (globals.isActive == true) {
+        ApiServices2.removeLocation().catchError((e) {
+          print('Error removing location: $e');
+        });
+        ApiServices2.stopTrackingDistance(getUserId());
+        globals.isActive = false;
+      }
     }
   }
 
