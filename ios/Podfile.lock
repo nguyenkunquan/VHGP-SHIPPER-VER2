@@ -958,6 +958,8 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.32):
     - BoringSSL-GRPC/Interface (= 0.0.32)
   - BoringSSL-GRPC/Interface (0.0.32)
+  - camera_avfoundation (0.0.1):
+    - Flutter
   - cloud_firestore (4.13.3):
     - Firebase/Firestore (= 10.18.0)
     - firebase_core
@@ -1175,6 +1177,7 @@ DEPENDENCIES:
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - background_location (from `.symlinks/plugins/background_location/ios`)
   - background_locator_2 (from `.symlinks/plugins/background_locator_2/ios`)
+  - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -1221,6 +1224,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/background_location/ios"
   background_locator_2:
     :path: ".symlinks/plugins/background_locator_2/ios"
+  camera_avfoundation:
+    :path: ".symlinks/plugins/camera_avfoundation/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   firebase_auth:
@@ -1252,6 +1257,7 @@ SPEC CHECKSUMS:
   background_location: 1b80c1fe3abd9912bca298618f6e365abf6f588f
   background_locator_2: bc8a422343ab656d5bd98e08694c6f89fef20418
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
+  camera_avfoundation: 759172d1a77ae7be0de08fc104cfb79738b8a59e
   cloud_firestore: 9b25b77371a845d07a48e5146799f6d4552f5940
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
   firebase_auth: 02d1a6340f81020cc302fb8fea8518908c546cec

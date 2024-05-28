@@ -59,8 +59,8 @@ class _ListOrderAceeptPageState extends State<ListOrderAceeptPage>
 
                 // print(listRoute),
                 _productsController.add(listRoute),
-                if( listRoute.any((element) => element.status==1))
-                AudioPlayer().play(AssetSource('audio/ding_126626.mp3'))
+                // if( listRoute.any((element) => element.status==1))
+                // AudioPlayer().play(AssetSource('audio/ding_126626.mp3'))
               }
           });
     });

@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -34,6 +36,7 @@ class OrderItem extends StatefulWidget {
   num orderActionId;
   num paymentType;
   num statusEdge;
+  
   List<OrderEdgeModel> orderEdgeList;
   OrderItem({
     Key? key,
@@ -67,8 +70,20 @@ class _OrderItemState extends State<OrderItem> {
   bool isLoadingButtonDialog = false;
 
   num activeRadio = 0;
+    File? _image;
+
 
   String activeRadioMessage = "";
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    if(pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
   Future<void> _makePhoneCall(String phoneNumber) async {
     if (phoneNumber != "") {
       final Uri launchUri = Uri(
@@ -78,7 +93,20 @@ class _OrderItemState extends State<OrderItem> {
       await launchUrl(launchUri);
     }
   }
-
+  String getCameraText(num action) {
+    switch(action) {
+      case OrderAction.pickupStore:
+        return "Chụp ảnh lấy hàng";
+      case OrderAction.deliveryHub:
+        return "Chụp ảnh giao hàng";
+      case OrderAction.pickupHub:
+        return "Chụp ảnh lấy hàng";
+      case OrderAction.deliveryCus:
+        return "Chụp ảnh giao hàng";
+      default:
+        return "Chụp ảnh lấy hàng";
+    }
+  }
   String getCompleteText(num action) {
     switch (action) {
       case OrderAction.pickupStore:
@@ -1455,6 +1483,47 @@ class _OrderItemState extends State<OrderItem> {
                   ],
                 ),
               ),
+              if (widget.statusEdge == StatusEdge.todo) ...[
+            SizedBox(height: 20),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: _pickImage,
+                    child: Text(
+                      getCameraText(widget.segment),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "SF Bold",
+                          fontSize: 16),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: MaterialColors.primary,
+                      textStyle: TextStyle(color: Colors.black),
+                      shadowColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                  if (_image != null)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.file(
+                        _image!,
+                        height: 500,
+                        width: 500,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Divider(
+              color: Color.fromRGBO(220, 220, 220, 1),
+              thickness: 1,
+            ),
+          ],
               // Container(
               //   decoration: BoxDecoration(
               //       border: Border(

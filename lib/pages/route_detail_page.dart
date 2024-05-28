@@ -893,7 +893,9 @@ class _RouteDetailPageState extends State<RouteDetailPage>
                         style: TextStyle(
                             fontSize: 18,
                             fontFamily: "SF Bold",
-                            color: Colors.white),
+                            color: Colors.white,
+                            decoration: TextDecoration.none
+                            ),
                       ),
                     ),
                   ),

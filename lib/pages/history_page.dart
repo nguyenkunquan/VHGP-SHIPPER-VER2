@@ -25,7 +25,7 @@ class _HistoryPageState extends State<HistoryPage> {
           Tab(
             child: Container(
               padding: EdgeInsets.only(top: 3),
-              width: 85,
+              width: 100,
               child: Text(
                 "Hoàn thành",
                 textAlign: TextAlign.center,

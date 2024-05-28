@@ -40,6 +40,7 @@ class ApiServices {
     try {
       var response = await http.get(
         Uri.parse('${baseURL}/routes/GetRoute'),
+        // Uri.parse('${baseURL}/routes/get-route-redis')
         // Uri.parse('https://66471a8651e227f23ab11638.mockapi.io/api/v1/hihi'),
       );
       var body = convert.jsonDecode(response.body);
