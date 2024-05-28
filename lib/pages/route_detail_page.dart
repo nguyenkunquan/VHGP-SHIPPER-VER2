@@ -331,6 +331,7 @@ class _RouteDetailPageState extends State<RouteDetailPage>
               statusCode = value,
               if (statusCode == "Successful")
                 {
+                  globals.shippingOrderCounter += 1,
                   setState(() => {widget.status = 2}),
                   hanldeGetListEdge(widget.routeId),
                   Fluttertoast.showToast(
@@ -987,7 +988,7 @@ class _RouteDetailPageState extends State<RouteDetailPage>
                         controller.success(); //starts success animation
                       },
                       child: const Text(
-                        "Chấp nhận haha",
+                        "Chấp nhận",
                         style: TextStyle(
                             fontSize: 18,
                             fontFamily: "SF Bold",

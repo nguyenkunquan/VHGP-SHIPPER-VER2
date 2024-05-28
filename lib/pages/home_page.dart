@@ -1589,9 +1589,9 @@ class _HomePageState extends State<HomePage> {
                                   value:
                                       context.watch<AppProvider>().isSwitched,
                                   onChanged: (bool newValue) {
-                                    context
-                                        .read<AppProvider>()
-                                        .toogleSwitch(newValue);
+                                    if (globals.shippingOrderCounter == 0) {
+                                      context.read<AppProvider>().toogleSwitch(newValue);
+                                    }
                                   },
                                   activeTrackColor: Colors.white30,
                                   activeColor: Colors.green,

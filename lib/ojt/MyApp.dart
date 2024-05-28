@@ -57,6 +57,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   Timer? locationTimer;
   void sendRedisLocationApi() {
+    print('Number of orders that are shipping: ${globals.shippingOrderCounter.toString()}');
     if (Provider.of<AppProvider>(context, listen: false).isSwitched) {
       print("Applifecyclestate: $_notification");
       BackgroundLocation.startLocationService().then((value) {

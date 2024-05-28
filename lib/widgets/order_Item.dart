@@ -20,6 +20,7 @@ import '../Json/constrain.dart';
 import '../apis/apiServices.dart';
 import '../models/MessageEdgeModel.dart';
 import '../models/OrderEdgeModel.dart';
+import '../ojt/globals.dart' as globals;
 
 class OrderItem extends StatefulWidget {
   Function callback;
@@ -184,6 +185,7 @@ class _OrderItemState extends State<OrderItem> {
     //   // Navigator.pop(context);
     //   // Navigator.pop(context);
     // });
+    globals.shippingOrderCounter -= 1;
     widget.callbackCancel(index, orderActionId, shipperId, actionType, message);
   }
   Future<void> hanldeComplteDialog(num index, StateSetter mystate, num orderActionId,
