@@ -18,6 +18,7 @@ import '../models/EdgeModel.dart';
 import '../models/MessageEdgeModel.dart';
 import '../provider/appProvider.dart';
 import 'order_detail_page.dart';
+import '../ojt/globals.dart' as globals;
 
 class RouteDetailPage extends StatefulWidget {
   num status;
@@ -313,6 +314,14 @@ class _RouteDetailPageState extends State<RouteDetailPage>
       isLoadingSubmit = true;
     });
     String statusCode = "";
+    if(!globals.isActive){
+      cannotReceivingOrderDialog();
+      setState(() {
+        isLoading = false;
+        isLoadingSubmit = false;
+      });
+      return;
+    }
     ApiServices.postAcceptRoute(routeId, shipId)
         .then((value) => {
           setState(() {
@@ -526,6 +535,95 @@ class _RouteDetailPageState extends State<RouteDetailPage>
             children: [
               const Text(
                 'Đã xảy ra lỗi gì đó!!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Color.fromRGBO(120, 120, 120, 1),
+                    fontFamily: "SF Regular",
+                    fontSize: 18),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: EdgeInsets.all(5),
+            child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 40,
+                      child: ElevatedButton(
+                        child: const Text(
+                          "Quay lại",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "SF SemiBold",
+                              fontSize: 16),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromRGBO(239, 81, 58, 1),
+                          textStyle: TextStyle(color: Colors.white),
+                          shadowColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        onPressed: () => {
+                          Navigator.pop(context),
+                        },
+                      ),
+                    ),
+                  )
+                ]),
+          )
+        ],
+      ),
+    ).then((value) => {
+          Navigator.pop(context),
+        });
+  }
+
+  cannotReceivingOrderDialog() {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        titlePadding: EdgeInsets.only(bottom: 0, top: 20),
+        // title: const Text(
+        //   'Đã xảy ra lỗi gì đó!!',
+        //   textAlign: TextAlign.center,
+        //   style: TextStyle(
+        //       color: Colors.black,
+        //       fontFamily: "SF Bold",
+        //       fontSize: 18),
+        // ),
+        actions: <Widget>[
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(
+                // color:25olors.red,
+                height: 40,
+                width: 40,
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                    "https://cdn-icons-png.flaticon.com/512/2058/2058197.png"),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Hãy bật trạng thái hoạt động!!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Color.fromRGBO(120, 120, 120, 1),
@@ -889,7 +987,7 @@ class _RouteDetailPageState extends State<RouteDetailPage>
                         controller.success(); //starts success animation
                       },
                       child: const Text(
-                        "Chấp nhận",
+                        "Chấp nhận haha",
                         style: TextStyle(
                             fontSize: 18,
                             fontFamily: "SF Bold",

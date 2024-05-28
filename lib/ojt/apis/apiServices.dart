@@ -136,10 +136,8 @@ class ApiServices2 {
       String shipperId, DateTime request) async {
     shipperId = Uri.encodeComponent(shipperId);
     String requestString = Uri.encodeComponent(request.toString());
-    // var url = Uri.parse(
-    //     'http://vhgp-api.vhgp.net/api/shipper-distances/$shipperId?request=$requestString');
     var url = Uri.parse(
-        'http://vhgp-api.vhgp.net/$shipperId?request=$requestString');
+        'http://vhgp-api.vhgp.net/api/shipper-distances/$shipperId?request=$requestString');
     print(url);
     var response = await http.get(
       url,
