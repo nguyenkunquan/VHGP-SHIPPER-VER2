@@ -159,6 +159,9 @@ class _OrderItemState extends State<OrderItem> {
       );
 
       if (response != null && response.statusCode == "Successful") {
+        if(actionType == OrderAction.deliveryCus) {
+          globals.shippingOrderCounter -= 1;
+        }
         setState(() {
           widget.callback(index);
           isLoadingButton = false;
@@ -220,6 +223,9 @@ class _OrderItemState extends State<OrderItem> {
     );
 
     if (response != null && response.statusCode == "Successful") {
+      if(orderActionId == OrderAction.deliveryCus) {
+        globals.shippingOrderCounter -= 1;
+      }
       mystate(() {
         widget.callback(index);
         isLoadingButtonDialog = false;
