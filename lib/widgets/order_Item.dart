@@ -14,7 +14,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:tmp_path/tmp_path.dart';
 import 'package:path/path.dart' as p;
-
+import 'package:another_flushbar/flushbar.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vhgp_deli/models/OrderCompleteModel.dart';
@@ -96,17 +96,16 @@ class _OrderItemState extends State<OrderItem> {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
     var dest = tmpPath() + p.extension(pickedFile!.name);
     await _nativeImgUtilPlugin.resizeFile(
-          srcFile: pickedFile.path,
-          destFile: dest,
-          width: 600,
-          height: 600,
-          quality: 90,
-          keepAspectRatio: true,
-          format: 'jpeg'
-    );
-    if(pickedFile != null) {
+        srcFile: pickedFile.path,
+        destFile: dest,
+        width: 600,
+        height: 600,
+        quality: 90,
+        keepAspectRatio: true,
+        format: 'jpeg');
+    if (pickedFile != null) {
       setState(() {
-        _image = File(dest);  
+        _image = File(dest);
       });
     }
   }
@@ -169,27 +168,25 @@ class _OrderItemState extends State<OrderItem> {
 
     // var check = false;
 
-   String base64Image = base64Encode(_image!.readAsBytesSync());
-    // var base64Image = base64Encode(_image!.readAsBytesSync()); 
+    String base64Image = base64Encode(_image!.readAsBytesSync());
+    // var base64Image = base64Encode(_image!.readAsBytesSync());
     // img.Image originalImage = img.decodeImage(_image!.readAsBytesSync())!;
     // img.Image resizedImage = img.copyResize(originalImage, width: 800);
     // List<int> imageBytes = img.encodeJpg(resizedImage);
     // String base64Image = base64Encode(imageBytes);
-    
 
-   print(base64Image);
-   var orderCompleteModel = OrderCompleteModel(
-        shipperId: shipperId,
-        actionType: actionType,
-        image: base64Image,
+    print(base64Image);
+    var orderCompleteModel = OrderCompleteModel(
+      shipperId: shipperId,
+      actionType: actionType,
+      image: base64Image,
     );
     try {
       var response = await ApiServices.orderComplete(
         orderActionId,
         orderCompleteModel,
       );
-      print(paymentTypeChange.toInt());
-      await ApiServices.updatePaymentType(widget.orderId, paymentTypeChange.toInt());
+      ApiServices.updatePaymentType(widget.orderId, paymentTypeChange.toInt());
 
       if (response != null && response.statusCode == "Successful") {
         if (actionType == OrderAction.deliveryCus) {
@@ -226,12 +223,12 @@ class _OrderItemState extends State<OrderItem> {
   Future<void> hanldeComplteDialog(num index, StateSetter mystate,
       num orderActionId, String shipperId, num actionType) async {
     if (_image == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Vui lòng chọn ảnh"),
-          backgroundColor: Colors.red,
-        ),
-      );
+      Flushbar(
+        message: "Vui lòng chọn ảnh",
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        flushbarPosition: FlushbarPosition.BOTTOM,
+      ).show(context);
       return;
     }
 
@@ -239,18 +236,18 @@ class _OrderItemState extends State<OrderItem> {
       isLoadingButtonDialog = true;
     });
 
-  // Convert image to base64
-  String base64Image = base64Encode(_image!.readAsBytesSync());
-  // var base64Image = base64Encode(_image!.readAsBytesSync()); 
+    // Convert image to base64
+    String base64Image = base64Encode(_image!.readAsBytesSync());
+    // var base64Image = base64Encode(_image!.readAsBytesSync());
     // img.Image originalImage = img.decodeImage(_image!.readAsBytesSync())!;
     // img.Image resizedImage = img.copyResize(originalImage, width: 300);
     // List<int> imageBytes = img.encodeJpg(resizedImage);
     // String base64Image = base64Encode(imageBytes);
-  print(base64Image);
-  var orderCompleteModel = OrderCompleteModel(
-        shipperId: shipperId,
-        actionType: actionType,
-        image: base64Image,
+    print(base64Image);
+    var orderCompleteModel = OrderCompleteModel(
+      shipperId: shipperId,
+      actionType: actionType,
+      image: base64Image,
     );
     try {
       var response = await ApiServices.orderComplete(
@@ -307,7 +304,8 @@ class _OrderItemState extends State<OrderItem> {
             return "Thu tiền mặt khách hàng";
           } else if (paymentTypeChange == 1) {
             return "Thanh toán qua VNPay";
-          } else return "";
+          } else
+            return "";
         default:
           return "---";
       }
@@ -615,7 +613,10 @@ class _OrderItemState extends State<OrderItem> {
                                             getMessageAction(segment);
                                         print(paymentType);
                                       });
-                                      mystate(() => {isLoadingButton = true, paymentTypeChange = newPaymentType});
+                                      mystate(() => {
+                                            isLoadingButton = false,
+                                            paymentTypeChange = newPaymentType
+                                          });
                                     },
                                   ),
                                 ],
@@ -783,8 +784,12 @@ class _OrderItemState extends State<OrderItem> {
                                     // },
                                     onPressed: isLoadingButtonDialog
                                         ? null
-                                        : () => hanldeComplteDialog(index, mystate,
-                                            orderActionId, shipperId, segment),
+                                        : () => hanldeComplteDialog(
+                                            index,
+                                            mystate,
+                                            orderActionId,
+                                            shipperId,
+                                            segment),
                                   ),
                                 ),
                               )

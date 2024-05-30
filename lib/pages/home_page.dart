@@ -5,6 +5,9 @@ import 'package:lottie/lottie.dart';
 
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:another_flushbar/flushbar_route.dart';
 
 import 'package:intl/intl.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -159,7 +162,8 @@ class _HomePageState extends State<HomePage> {
                     String actualYear = formatterYear.format(now);
                     String dayFilter =
                         "${actualMonth}/${actualDate}/${actualYear}";
-                    globals.dateOnly = "${actualYear}-${actualMonth}-${actualDate}";
+                    globals.dateOnly =
+                        "${actualYear}-${actualMonth}-${actualDate}";
                     print(dayFilter);
                     hanldeFilter(shipperId, dayFilter, "", "");
                   });
@@ -190,7 +194,8 @@ class _HomePageState extends State<HomePage> {
                     String actualYear = formatterYear.format(now);
                     String dayFilter =
                         "${actualMonth}/${actualDate}/${actualYear}";
-                    globals.dateOnly = '${actualYear}-${actualMonth}-${actualDate}';
+                    globals.dateOnly =
+                        '${actualYear}-${actualMonth}-${actualDate}';
                     print(dayFilter);
                     hanldeFilter(shipperId, dayFilter, "", "");
                   });
@@ -266,7 +271,8 @@ class _HomePageState extends State<HomePage> {
                                 String actualYear = formatterYear.format(now);
                                 String dayFilter =
                                     "${actualMonth}/${actualDate}/${actualYear}";
-                                globals.dateOnly = '${actualYear}-${actualMonth}-${actualDate}';
+                                globals.dateOnly =
+                                    '${actualYear}-${actualMonth}-${actualDate}';
                                 hanldeFilter(shipperId, dayFilter, "", "");
                               });
                             },
@@ -324,7 +330,8 @@ class _HomePageState extends State<HomePage> {
                                 String actualYear = formatterYear.format(now);
                                 String dayFilter =
                                     "${actualMonth} ${actualDate} ${actualYear}";
-                                globals.dateOnly = '${actualYear}-${actualMonth}-${actualDate}';
+                                globals.dateOnly =
+                                    '${actualYear}-${actualMonth}-${actualDate}';
                                 subtractFilter = subtractFilter + 1;
                                 hanldeFilter(shipperId, dayFilter, "", "");
                               });
@@ -1476,51 +1483,49 @@ class _HomePageState extends State<HomePage> {
   }
 
   void hanldeFilter(String shipperId, String day, String month, String year) {
-  setState(() {
-    isLoadingFilter = true;
-  });
-  ApiServices.getReportOrder(shipperId, day, month, year)
-      .then((value2) {
-        if (value2 != null) {
-          messageEdgeModel = value2;
-          setState(() {
-            totalOrder = messageEdgeModel.data["total"];
-            totalSuccess = messageEdgeModel.data["success"];
-            totalFail = messageEdgeModel.data["canceled"];
-            totalCusFail = messageEdgeModel.data["customerFail"];
-            totalOrderCost = messageEdgeModel.data["totalOrderCost"];
-            totalShipCost = messageEdgeModel.data["totalShipCost"];
-            isLoadingFilter = false;
-          });
-        } else {
-          setState(() {
-            isLoadingFilter = false;
-          });
-        }
-      })
-      .then((value) {
-        String dayFilter = "${year}-${month}-${day}";
-        ApiServices2.getTotalDistanceByDate(shipperId, DateTime.parse(globals.dateOnly))
-            .then((value) {
-          if (value != null) {
-            setState(() {
-              totalDistanceByDate = value;
-              isLoading = false;
-            });
-          } else {
-            setState(() {
-              isLoading = false;
-            });
-          }
+    setState(() {
+      isLoadingFilter = true;
+    });
+    ApiServices.getReportOrder(shipperId, day, month, year).then((value2) {
+      if (value2 != null) {
+        messageEdgeModel = value2;
+        setState(() {
+          totalOrder = messageEdgeModel.data["total"];
+          totalSuccess = messageEdgeModel.data["success"];
+          totalFail = messageEdgeModel.data["canceled"];
+          totalCusFail = messageEdgeModel.data["customerFail"];
+          totalOrderCost = messageEdgeModel.data["totalOrderCost"];
+          totalShipCost = messageEdgeModel.data["totalShipCost"];
+          isLoadingFilter = false;
         });
-      })
-      .catchError((onError) {
-        print("onError: " + onError.toString());
+      } else {
         setState(() {
           isLoadingFilter = false;
         });
+      }
+    }).then((value) {
+      String dayFilter = "${year}-${month}-${day}";
+      ApiServices2.getTotalDistanceByDate(
+              shipperId, DateTime.parse(globals.dateOnly))
+          .then((value) {
+        if (value != null) {
+          setState(() {
+            totalDistanceByDate = value;
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+        }
       });
-}
+    }).catchError((onError) {
+      print("onError: " + onError.toString());
+      setState(() {
+        isLoadingFilter = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1590,7 +1595,37 @@ class _HomePageState extends State<HomePage> {
                                       context.watch<AppProvider>().isSwitched,
                                   onChanged: (bool newValue) {
                                     if (globals.shippingOrderCounter == 0) {
-                                      context.read<AppProvider>().toogleSwitch(newValue);
+                                      context
+                                          .read<AppProvider>()
+                                          .toogleSwitch(newValue);
+                                    } else {
+                                      Flushbar(
+                                        messageText: const Center(
+                                          child: Text(
+                                            "Vẫn còn đơn hàng chưa giao xong!",
+                                            style: TextStyle(
+                                                color: Colors.orange,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                        icon: Icon(
+                                          Icons.info_outline,
+                                          color: Colors.orange,
+                                        ),
+                                        duration: Duration(seconds: 2),
+                                        flushbarPosition: FlushbarPosition.TOP,
+                                        backgroundColor: Colors.white,
+                                        flushbarStyle: FlushbarStyle.FLOATING,
+                                        margin: EdgeInsets.all(8),
+                                        borderRadius: BorderRadius.circular(8),
+                                        boxShadows: [
+                                          const BoxShadow(
+                                            color: Colors.black45,
+                                            offset: Offset(3, 3),
+                                            blurRadius: 3,
+                                          ),
+                                        ],
+                                      ).show(context);
                                     }
                                   },
                                   activeTrackColor: Colors.white30,
