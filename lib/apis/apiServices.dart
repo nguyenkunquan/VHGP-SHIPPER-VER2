@@ -257,6 +257,10 @@ class ApiServices {
     OrderCompleteModel orderCompleteModel,
   ) async {
     print('orderComplete');
+    // For testing
+    // if(orderCompleteModel.actionType == 4) {
+    //   return;
+    // };
     Map<String, String> headers = {"Content-type": "application/json"};
     var messageEdgeModel = Completer<MessageEdgeModel>();
     var body;
@@ -397,4 +401,20 @@ class ApiServices {
       print('Error with status code: ${e}');
     }
   }
+
+  static Future<void> updatePaymentType(String orderId, int paymentType) async {
+    print("updatePaymentType: order id $orderId, payment type $paymentType");
+    var url = Uri.parse(
+        'https://api.vhgp.net/api/v1/orders/$orderId/payments?paymentType=$paymentType');
+    var response = await http.patch(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+    print(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to update payment type ${response.statusCode} ${response.body}');
+    }
+  }
+
 }

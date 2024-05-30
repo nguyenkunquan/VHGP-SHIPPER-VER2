@@ -20,6 +20,7 @@ import '../Json/constrain.dart';
 import '../apis/apiServices.dart';
 import '../models/MessageEdgeModel.dart';
 import '../models/OrderEdgeModel.dart';
+import 'payment_type_dropdownbutton.dart'; // Import the MyDropdownButton widget
 import '../ojt/globals.dart' as globals;
 
 class OrderItem extends StatefulWidget {
@@ -40,7 +41,7 @@ class OrderItem extends StatefulWidget {
   num orderActionId;
   num paymentType;
   num statusEdge;
-  
+
   List<OrderEdgeModel> orderEdgeList;
   OrderItem({
     Key? key,
@@ -76,18 +77,26 @@ class _OrderItemState extends State<OrderItem> {
   num activeRadio = 0;
   File? _image;
 
+  num paymentTypeChange = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    paymentTypeChange = widget.paymentType;
+  }
 
   String activeRadioMessage = "";
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
-    if(pickedFile != null) {
+    if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
       });
     }
   }
+
   Future<void> _makePhoneCall(String phoneNumber) async {
     if (phoneNumber != "") {
       final Uri launchUri = Uri(
@@ -97,8 +106,9 @@ class _OrderItemState extends State<OrderItem> {
       await launchUrl(launchUri);
     }
   }
+
   String getCameraText(num action) {
-    switch(action) {
+    switch (action) {
       case OrderAction.pickupStore:
         return "Chụp ảnh lấy hàng";
       case OrderAction.deliveryHub:
@@ -111,6 +121,7 @@ class _OrderItemState extends State<OrderItem> {
         return "Chụp ảnh lấy hàng";
     }
   }
+
   String getCompleteText(num action) {
     switch (action) {
       case OrderAction.pickupStore:
@@ -128,14 +139,14 @@ class _OrderItemState extends State<OrderItem> {
 
   Future<void> hanldeComplte(
       num index, num orderActionId, String shipperId, num actionType) async {
-    MessageEdgeModel messageEdgeModel;  
-    if(_image == null) {
+    MessageEdgeModel messageEdgeModel;
+    if (_image == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Vui lòng chọn ảnh"),
-        backgroundColor: Colors.red,
-      ),
-    );
+        SnackBar(
+          content: Text("Vui lòng chọn ảnh"),
+          backgroundColor: Colors.red,
+        ),
+      );
       return;
     }
     setState(() {
@@ -144,22 +155,24 @@ class _OrderItemState extends State<OrderItem> {
 
     // var check = false;
 
-  //  String base64Image = base64Encode(_image!.readAsBytesSync());
-    var base64Image = base64Encode(_image!.readAsBytesSync()); 
-   print(base64Image);
-   var orderCompleteModel = OrderCompleteModel(
-        shipperId: shipperId,
-        actionType: actionType,
-        image: base64Image,
+    //  String base64Image = base64Encode(_image!.readAsBytesSync());
+    var base64Image = base64Encode(_image!.readAsBytesSync());
+    print(base64Image);
+    var orderCompleteModel = OrderCompleteModel(
+      shipperId: shipperId,
+      actionType: actionType,
+      image: base64Image,
     );
     try {
       var response = await ApiServices.orderComplete(
         orderActionId,
         orderCompleteModel,
       );
+      print(paymentTypeChange.toInt());
+      await ApiServices.updatePaymentType(widget.orderId, paymentTypeChange.toInt());
 
       if (response != null && response.statusCode == "Successful") {
-        if(actionType == OrderAction.deliveryCus) {
+        if (actionType == OrderAction.deliveryCus) {
           globals.shippingOrderCounter -= 1;
         }
         setState(() {
@@ -178,10 +191,9 @@ class _OrderItemState extends State<OrderItem> {
       });
     }
   }
-    
 
-  hanldeCancel(num index, num orderActionId, String shipperId,
-      num actionType, String message) {
+  hanldeCancel(num index, num orderActionId, String shipperId, num actionType,
+      String message) {
     // setState(() {
     //   isLoadingButtonCancelDialog = true;
     //   // widget.orderEdgeList[index].actionStatus = 3;
@@ -191,61 +203,60 @@ class _OrderItemState extends State<OrderItem> {
     globals.shippingOrderCounter -= 1;
     widget.callbackCancel(index, orderActionId, shipperId, actionType, message);
   }
-  Future<void> hanldeComplteDialog(num index, StateSetter mystate, num orderActionId,
-    String shipperId, num actionType) async {
-  if (_image == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Vui lòng chọn ảnh"),
-        backgroundColor: Colors.red,
-      ),
-    );
-    return;
-  }
 
-  mystate(() {
-    isLoadingButtonDialog = true;
-  });
+  Future<void> hanldeComplteDialog(num index, StateSetter mystate,
+      num orderActionId, String shipperId, num actionType) async {
+    if (_image == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Vui lòng chọn ảnh"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
-  // Convert image to base64
-  // String base64Image = base64Encode(_image!.readAsBytesSync());
-  var base64Image = base64Encode(_image!.readAsBytesSync()); 
-  print(base64Image);
-  var orderCompleteModel = OrderCompleteModel(
-        shipperId: shipperId,
-        actionType: actionType,
-        image: base64Image,
-    );
-  try {
-    var response = await ApiServices.orderComplete(
-      orderActionId,
-      orderCompleteModel,
-    );
+    mystate(() {
+      isLoadingButtonDialog = true;
+    });
 
-    if (response != null && response.statusCode == "Successful") {
-      if(orderActionId == OrderAction.deliveryCus) {
-        globals.shippingOrderCounter -= 1;
+    // Convert image to base64
+    // String base64Image = base64Encode(_image!.readAsBytesSync());
+    var base64Image = base64Encode(_image!.readAsBytesSync());
+    print(base64Image);
+    var orderCompleteModel = OrderCompleteModel(
+      shipperId: shipperId,
+      actionType: actionType,
+      image: base64Image,
+    );
+    try {
+      var response = await ApiServices.orderComplete(
+        orderActionId,
+        orderCompleteModel,
+      );
+      ApiServices.updatePaymentType(widget.orderId, paymentTypeChange.toInt());
+
+      if (response != null && response.statusCode == "Successful") {
+        if (orderActionId == OrderAction.deliveryCus) {
+          globals.shippingOrderCounter -= 1;
+        }
+        mystate(() {
+          widget.callback(index);
+          isLoadingButtonDialog = false;
+        });
+        Navigator.pop(context);
+      } else {
+        mystate(() {
+          isLoadingButtonDialog = false;
+        });
       }
-      mystate(() {
-        widget.callback(index);
-        isLoadingButtonDialog = false;
-      });
-      Navigator.pop(context);
-    } else {
+    } catch (error) {
+      print("onError: " + error.toString());
       mystate(() {
         isLoadingButtonDialog = false;
       });
     }
-  } catch (error) {
-    print("onError: " + error.toString());
-    mystate(() {
-      isLoadingButtonDialog = false;
-    });
   }
-}
-
-
-  
 
   showModal(
     index,
@@ -269,7 +280,11 @@ class _OrderItemState extends State<OrderItem> {
         case OrderAction.pickupHub | OrderAction.deliveryHub:
           return "---";
         case OrderAction.deliveryCus:
-          return "Thu tiền mặt khách hàng";
+          if (paymentTypeChange == 0) {
+            return "Thu tiền mặt khách hàng";
+          } else if (paymentTypeChange == 1) {
+            return "Thanh toán qua VNPay";
+          } else return "";
         default:
           return "---";
       }
@@ -318,6 +333,7 @@ class _OrderItemState extends State<OrderItem> {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(8.0))),
         builder: (BuildContext context) {
+          var messageAction = getMessageAction(segment);
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter mystate) {
             return Container(
@@ -384,11 +400,11 @@ class _OrderItemState extends State<OrderItem> {
                                 ),
                               ],
                             ),
-                          
+
                             SizedBox(
                               height: 10,
                             ),
-                            
+
                             Row(
                               children: [
                                 Expanded(
@@ -404,13 +420,14 @@ class _OrderItemState extends State<OrderItem> {
                                           minHeight: 32,
                                         ),
                                         child: Text(
-                                          customerNote == "" ? "Không có" : customerNote,
+                                          customerNote == ""
+                                              ? "Không có"
+                                              : customerNote,
                                           style: const TextStyle(
                                               color: MaterialColors.black,
                                               fontFamily: "SF Medium",
                                               fontSize: 16),
                                         ),
-                                        
                                       )),
                                 )
                               ],
@@ -434,11 +451,11 @@ class _OrderItemState extends State<OrderItem> {
                                 ),
                               ],
                             ),
-                          
+
                             SizedBox(
                               height: 10,
                             ),
-                            
+
                             Row(
                               children: [
                                 Expanded(
@@ -454,13 +471,14 @@ class _OrderItemState extends State<OrderItem> {
                                           minHeight: 32,
                                         ),
                                         child: Text(
-                                          orderNote == "" ? "Không có" : orderNote,
+                                          orderNote == ""
+                                              ? "Không có"
+                                              : orderNote,
                                           style: const TextStyle(
                                               color: MaterialColors.black,
                                               fontFamily: "SF Medium",
                                               fontSize: 16),
                                         ),
-                                        
                                       )),
                                 )
                               ],
@@ -565,15 +583,18 @@ class _OrderItemState extends State<OrderItem> {
                                         fontFamily: "SF Regular",
                                         fontSize: 16),
                                   ),
-                                  Text(
-                                    paymentType == 0
-                                        ? "Tiền mặt"
-                                        : "Đã thanh toán",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: "SF Semibold",
-                                        fontSize: 16),
-                                  )
+                                  PaymentTypeDropDownButton(
+                                    paymentType: paymentTypeChange,
+                                    onPaymentTypeChanged: (newPaymentType) {
+                                      setState(() {
+                                        paymentTypeChange = newPaymentType;
+                                        messageAction =
+                                            getMessageAction(segment);
+                                        print(paymentType);
+                                      });
+                                      mystate(() => {isLoadingButton = true, paymentTypeChange = newPaymentType});
+                                    },
+                                  ),
                                 ],
                               ),
                               SizedBox(
@@ -640,7 +661,7 @@ class _OrderItemState extends State<OrderItem> {
                                     children: [
                                       SizedBox(width: 5),
                                       Text(
-                                        getMessageAction(segment),
+                                        messageAction,
                                         style: TextStyle(
                                             color:
                                                 Color.fromRGBO(50, 50, 50, 1),
@@ -1519,46 +1540,46 @@ class _OrderItemState extends State<OrderItem> {
                 ),
               ),
               if (widget.statusEdge == StatusEdge.todo) ...[
-            SizedBox(height: 20),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: _pickImage,
-                    child: Text(
-                      getCameraText(widget.segment),
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: "SF Bold",
-                          fontSize: 16),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: MaterialColors.primary,
-                      textStyle: TextStyle(color: Colors.black),
-                      shadowColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                SizedBox(height: 20),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: _pickImage,
+                        child: Text(
+                          getCameraText(widget.segment),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "SF Bold",
+                              fontSize: 16),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: MaterialColors.primary,
+                          textStyle: TextStyle(color: Colors.black),
+                          shadowColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                       ),
-                    ),
+                      if (_image != null)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.file(
+                            _image!,
+                            height: 500,
+                            width: 500,
+                          ),
+                        ),
+                    ],
                   ),
-                  if (_image != null)
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.file(
-                        _image!,
-                        height: 500,
-                        width: 500,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            Divider(
-              color: Color.fromRGBO(220, 220, 220, 1),
-              thickness: 1,
-            ),
-          ],
+                ),
+                Divider(
+                  color: Color.fromRGBO(220, 220, 220, 1),
+                  thickness: 1,
+                ),
+              ],
               // Container(
               //   decoration: BoxDecoration(
               //       border: Border(
@@ -1732,7 +1753,7 @@ class _OrderItemState extends State<OrderItem> {
                                       widget.index,
                                       widget.orderActionId,
                                       widget.shipperId,
-                                      widget.segment),
+                                      widget.segment,),
                                 },
                               ),
                             ),
