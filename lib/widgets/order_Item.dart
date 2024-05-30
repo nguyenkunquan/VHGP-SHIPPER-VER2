@@ -76,7 +76,6 @@ class _OrderItemState extends State<OrderItem> {
   final currencyFormatter = NumberFormat('#,##0', 'ID');
   bool isLoadingButton = false;
   bool isLoadingButtonDialog = false;
-
   num activeRadio = 0;
   File? _image;
   final _nativeImgUtilPlugin = FcNativeImageResize();
@@ -88,13 +87,12 @@ class _OrderItemState extends State<OrderItem> {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
     var dest = tmpPath() + p.extension(pickedFile!.name);
     await _nativeImgUtilPlugin.resizeFile(
-          srcFile: pickedFile!.path,
+          srcFile: pickedFile.path,
           destFile: dest,
           width: 600,
           height: 600,
           quality: 90,
           keepAspectRatio: true,
-          srcFileUri: Platform.isAndroid,
           format: 'jpeg'
     );
     if(pickedFile != null) {
@@ -757,10 +755,14 @@ class _OrderItemState extends State<OrderItem> {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    onPressed: () => {
-                                      hanldeComplteDialog(index, mystate,
-                                          orderActionId, shipperId, segment),
-                                    },
+                                    // onPressed: () => {
+                                    //   hanldeComplteDialog(index, mystate,
+                                    //       orderActionId, shipperId, segment),
+                                    // },
+                                    onPressed: isLoadingButtonDialog
+                                        ? null
+                                        : () => hanldeComplteDialog(index, mystate,
+                                            orderActionId, shipperId, segment),
                                   ),
                                 ),
                               )
@@ -1751,13 +1753,20 @@ class _OrderItemState extends State<OrderItem> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                onPressed: () => {
-                                  hanldeComplte(
-                                      widget.index,
-                                      widget.orderActionId,
-                                      widget.shipperId,
-                                      widget.segment),
-                                },
+                                // onPressed: () => {
+                                //   hanldeComplte(
+                                //       widget.index,
+                                //       widget.orderActionId,
+                                //       widget.shipperId,
+                                //       widget.segment),
+                                // },
+                                onPressed: isLoadingButton
+                                    ? null
+                                    : () => hanldeComplte(
+                                        widget.index,
+                                        widget.orderActionId,
+                                        widget.shipperId,
+                                        widget.segment),
                               ),
                             ),
                           )

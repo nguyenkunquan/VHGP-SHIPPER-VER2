@@ -16,7 +16,7 @@ class ApiServices2 {
     print(pen('User ID: ${user!.email}'));
     print(pen('sendLocation function called'));
     print(pen('Sending location: $latitude, $longitude'));
-    var url = Uri.parse('http://vhgp-api.vhgp.net/api/Shipper/AddRedis');
+    var url = Uri.parse('https://vhgp-api.vhgp.net/api/Shipper/AddRedis');
     var response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -36,7 +36,7 @@ class ApiServices2 {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     var url = Uri.parse(
-        'http://vhgp-api.vhgp.net/api/Shipper/RemoveRedis/${user!.email}');
+        'https://vhgp-api.vhgp.net/api/Shipper/RemoveRedis/${user!.email}');
     var response = await http.delete(url);
     print(response);
     if (response.statusCode != 200) {
@@ -59,7 +59,7 @@ class ApiServices2 {
 
   static Future<void> createOrderDistance(String orderId) async {
     var url =
-        Uri.parse('http://vhgp-api.vhgp.net/api/order-distances?$orderId');
+        Uri.parse('https://vhgp-api.vhgp.net/api/order-distances?$orderId');
     var response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -73,7 +73,7 @@ class ApiServices2 {
   static Future<void> saveDistanceTracker(
       String orderId, double latitude, double longitude) async {
     var url = Uri.parse(
-        'http://vhgp-api.vhgp.net/api/order-distances/distance-tracker/$orderId');
+        'https://vhgp-api.vhgp.net/api/order-distances/distance-tracker/$orderId');
     var response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -87,7 +87,7 @@ class ApiServices2 {
 
   static Future<void> terminateOrderDistances(String orderId) async {
     var url =
-        Uri.parse('http://vhgp-api.vhgp.net/api/order-distances/$orderId');
+        Uri.parse('https://vhgp-api.vhgp.net/api/order-distances/$orderId');
     var response = await http.patch(
       url,
       headers: {"Content-Type": "application/json"},
@@ -105,7 +105,7 @@ class ApiServices2 {
     // var url = Uri.parse('https://192.168.1.180:7253/api/shipper-distances/tracking/$shipperId');
     // var url = Uri.parse('https://localhost:7253/api/shipper-distances/tracking/$shipperId');
     var url = Uri.parse(
-        'http://vhgp-api.vhgp.net/api/shipper-distances/tracking/$shipperId');
+        'https://vhgp-api.vhgp.net/api/shipper-distances/tracking/$shipperId');
     var response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -121,7 +121,7 @@ class ApiServices2 {
     shipperId = Uri.encodeComponent(shipperId);
     // var url = Uri.parse('https://192.168.1.180:7253/api/shipper-distances/stopping/$shipperId');
     var url = Uri.parse(
-        'http://vhgp-api.vhgp.net/api/shipper-distances/stopping/$shipperId');
+        'https://vhgp-api.vhgp.net/api/shipper-distances/stopping/$shipperId');
     var response = await http.patch(
       url,
       headers: {"Content-Type": "application/json"},
@@ -137,7 +137,7 @@ class ApiServices2 {
     shipperId = Uri.encodeComponent(shipperId);
     String requestString = Uri.encodeComponent(request.toString());
     var url = Uri.parse(
-        'http://vhgp-api.vhgp.net/api/shipper-distances/$shipperId?request=$requestString');
+        'https://vhgp-api.vhgp.net/api/shipper-distances/$shipperId?request=$requestString');
     print(url);
     var response = await http.get(
       url,
