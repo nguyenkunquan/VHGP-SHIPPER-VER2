@@ -965,6 +965,9 @@ PODS:
     - firebase_core
     - Flutter
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - fc_native_image_resize (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - Firebase/Auth (10.18.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 10.18.0)
@@ -1179,6 +1182,7 @@ DEPENDENCIES:
   - background_locator_2 (from `.symlinks/plugins/background_locator_2/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - fc_native_image_resize (from `.symlinks/plugins/fc_native_image_resize/darwin`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
@@ -1228,6 +1232,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  fc_native_image_resize:
+    :path: ".symlinks/plugins/fc_native_image_resize/darwin"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -1259,6 +1265,7 @@ SPEC CHECKSUMS:
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
   camera_avfoundation: 759172d1a77ae7be0de08fc104cfb79738b8a59e
   cloud_firestore: 9b25b77371a845d07a48e5146799f6d4552f5940
+  fc_native_image_resize: e321e959f7051e85d2bb2796108584b83dda1d41
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
   firebase_auth: 02d1a6340f81020cc302fb8fea8518908c546cec
   firebase_core: f802c5c1f6caff9b8d38b591a36e7b25f8878936

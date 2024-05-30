@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fc_native_image_resize/fc_native_image_resize.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -11,16 +12,19 @@ import 'package:material_dialogs/material_dialogs.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:tmp_path/tmp_path.dart';
+import 'package:path/path.dart' as p;
+
 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vhgp_deli/models/OrderCompleteModel.dart';
+import '../ojt/globals.dart' as globals;
 
 import '../Colors/color.dart';
 import '../Json/constrain.dart';
 import '../apis/apiServices.dart';
 import '../models/MessageEdgeModel.dart';
 import '../models/OrderEdgeModel.dart';
-import 'payment_type_dropdownbutton.dart'; // Import the MyDropdownButton widget
 import '../ojt/globals.dart' as globals;
 
 class OrderItem extends StatefulWidget {
@@ -73,9 +77,9 @@ class _OrderItemState extends State<OrderItem> {
   final currencyFormatter = NumberFormat('#,##0', 'ID');
   bool isLoadingButton = false;
   bool isLoadingButtonDialog = false;
-
   num activeRadio = 0;
   File? _image;
+  final _nativeImgUtilPlugin = FcNativeImageResize();
 
   num paymentTypeChange = 0;
 
@@ -89,10 +93,19 @@ class _OrderItemState extends State<OrderItem> {
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
+    var dest = tmpPath() + p.extension(pickedFile!.name);
+    await _nativeImgUtilPlugin.resizeFile(
+          srcFile: pickedFile.path,
+          destFile: dest,
+          width: 600,
+          height: 600,
+          quality: 90,
+          keepAspectRatio: true,
+          format: 'jpeg'
+    );
+    if(pickedFile != null) {
       setState(() {
-        _image = File(pickedFile.path);
+        _image = File(dest);  
       });
     }
   }
@@ -155,13 +168,19 @@ class _OrderItemState extends State<OrderItem> {
 
     // var check = false;
 
-    //  String base64Image = base64Encode(_image!.readAsBytesSync());
-    var base64Image = base64Encode(_image!.readAsBytesSync());
-    print(base64Image);
-    var orderCompleteModel = OrderCompleteModel(
-      shipperId: shipperId,
-      actionType: actionType,
-      image: base64Image,
+   String base64Image = base64Encode(_image!.readAsBytesSync());
+    // var base64Image = base64Encode(_image!.readAsBytesSync()); 
+    // img.Image originalImage = img.decodeImage(_image!.readAsBytesSync())!;
+    // img.Image resizedImage = img.copyResize(originalImage, width: 800);
+    // List<int> imageBytes = img.encodeJpg(resizedImage);
+    // String base64Image = base64Encode(imageBytes);
+    
+
+   print(base64Image);
+   var orderCompleteModel = OrderCompleteModel(
+        shipperId: shipperId,
+        actionType: actionType,
+        image: base64Image,
     );
     try {
       var response = await ApiServices.orderComplete(
@@ -200,7 +219,6 @@ class _OrderItemState extends State<OrderItem> {
     //   // Navigator.pop(context);
     //   // Navigator.pop(context);
     // });
-    globals.shippingOrderCounter -= 1;
     widget.callbackCancel(index, orderActionId, shipperId, actionType, message);
   }
 
@@ -220,14 +238,18 @@ class _OrderItemState extends State<OrderItem> {
       isLoadingButtonDialog = true;
     });
 
-    // Convert image to base64
-    // String base64Image = base64Encode(_image!.readAsBytesSync());
-    var base64Image = base64Encode(_image!.readAsBytesSync());
-    print(base64Image);
-    var orderCompleteModel = OrderCompleteModel(
-      shipperId: shipperId,
-      actionType: actionType,
-      image: base64Image,
+  // Convert image to base64
+  String base64Image = base64Encode(_image!.readAsBytesSync());
+  // var base64Image = base64Encode(_image!.readAsBytesSync()); 
+    // img.Image originalImage = img.decodeImage(_image!.readAsBytesSync())!;
+    // img.Image resizedImage = img.copyResize(originalImage, width: 300);
+    // List<int> imageBytes = img.encodeJpg(resizedImage);
+    // String base64Image = base64Encode(imageBytes);
+  print(base64Image);
+  var orderCompleteModel = OrderCompleteModel(
+        shipperId: shipperId,
+        actionType: actionType,
+        image: base64Image,
     );
     try {
       var response = await ApiServices.orderComplete(
@@ -754,10 +776,14 @@ class _OrderItemState extends State<OrderItem> {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    onPressed: () => {
-                                      hanldeComplteDialog(index, mystate,
-                                          orderActionId, shipperId, segment),
-                                    },
+                                    // onPressed: () => {
+                                    //   hanldeComplteDialog(index, mystate,
+                                    //       orderActionId, shipperId, segment),
+                                    // },
+                                    onPressed: isLoadingButtonDialog
+                                        ? null
+                                        : () => hanldeComplteDialog(index, mystate,
+                                            orderActionId, shipperId, segment),
                                   ),
                                 ),
                               )
@@ -1748,13 +1774,20 @@ class _OrderItemState extends State<OrderItem> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                onPressed: () => {
-                                  hanldeComplte(
-                                      widget.index,
-                                      widget.orderActionId,
-                                      widget.shipperId,
-                                      widget.segment,),
-                                },
+                                // onPressed: () => {
+                                //   hanldeComplte(
+                                //       widget.index,
+                                //       widget.orderActionId,
+                                //       widget.shipperId,
+                                //       widget.segment),
+                                // },
+                                onPressed: isLoadingButton
+                                    ? null
+                                    : () => hanldeComplte(
+                                        widget.index,
+                                        widget.orderActionId,
+                                        widget.shipperId,
+                                        widget.segment),
                               ),
                             ),
                           )

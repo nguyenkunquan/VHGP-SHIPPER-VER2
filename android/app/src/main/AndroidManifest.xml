@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
-        android:label="vhgp_deli"
+        android:label="VHGP Driver"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
