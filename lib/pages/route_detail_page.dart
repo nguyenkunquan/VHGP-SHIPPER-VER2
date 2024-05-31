@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:vhgp_deli/ojt/apis/apiServices.dart';
 
 import '../Colors/color.dart';
 import '../Json/constrain.dart';
@@ -359,7 +360,23 @@ class _RouteDetailPageState extends State<RouteDetailPage>
               })
             });
   }
-
+    handleUpdateShipperStatus(num status) {
+      String statusCode = "";
+      ApiServices2.updateStatusShipper(status)
+          .then((value) => {
+                statusCode = value,
+                if (statusCode == "Successful")
+                  {
+                    print("Update status success"),
+                  }
+                else
+                  {
+                    print("Update status fail"),
+                  }
+          })
+          .catchError((onError) => {print("onError: " + onError.toString())});
+    }
+  
   dialogDone() {
     return showDialog<String>(
       context: context,
@@ -981,12 +998,14 @@ class _RouteDetailPageState extends State<RouteDetailPage>
                           () => {
                             // Navigator.pop(context),
 
-                            hanldeAcceptRoute(widget.routeId, shipperId)
+                            hanldeAcceptRoute(widget.routeId, shipperId),
+                            handleUpdateShipperStatus(1),
                           },
                         );
                         // await hanldeAcceptRoute(widget.routeId, shipperId);
                         controller.success(); //starts success animation
                       },
+                      
                       child: const Text(
                         "Chấp nhận",
                         style: TextStyle(
