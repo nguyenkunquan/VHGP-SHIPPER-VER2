@@ -84,6 +84,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           print('Error removing location: $e');
         });
         ApiServices2.stopTrackingDistance(getUserId());
+        ApiServices2.updateTimeOffShipper().catchError((e) {
+          print('Error update time off: $e');
+        });
         globals.isActive = false;
       }
     }

@@ -34,13 +34,25 @@ class ApiServices2 {
   static Future<dynamic> updateStatusShipper(num status) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
-    var url = Uri.parse('https://vhgp-api.vhgp.net/api/Shipper/UpdateStatus/${user!.email}/status=${status}');
+    var url = Uri.parse('https://vhgp-api.vhgp.net/api/Shipper/UpdateStatusShipper/${user!.email}?status=$status');
     var response = await http.patch(
       url,
       headers: {"Content-Type": "application/json"},
     );
     if(response.statusCode != 200) {
       throw Exception('Failed to update status: ${response.statusCode} ${response.body}');
+    }
+  }
+  static Future<dynamic> updateTimeOffShipper() async{
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    var url = Uri.parse('https://vhgp-api.vhgp.net/api/Shipper/UpdateShipperOffTime?shipperId=${user!.email}');
+    var response = await http.patch(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+    if(response.statusCode != 200) {
+      throw Exception('Failed to update time off: ${response.statusCode} ${response.body}');
     }
   }
 
