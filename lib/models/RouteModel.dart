@@ -10,6 +10,7 @@ class RouteModel {
   String? shipperId;
   num? status;
   num? type;
+  int? orderActionStatus; // orderActionStatus of orderActionType 1 (shipper đang lấy hàng)
 
   RouteModel(
       {this.orderId,
@@ -22,7 +23,8 @@ class RouteModel {
       this.totalCod,
       this.shipperId,
       this.status,
-      this.type});
+      this.type,
+      this.orderActionStatus});
 
   RouteModel.fromJson(Map<String, dynamic> json) {
     orderId = json['orderId'];
@@ -36,6 +38,7 @@ class RouteModel {
     shipperId = json['shipperId'];
     status = json['status'];
     type = json['type'];
+    orderActionStatus = json['orderActionStatus'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +54,7 @@ class RouteModel {
     data['shipperId'] = shipperId;
     data['status'] = status;
     data['type'] = type;
+    data['orderActionStatus'] = orderActionStatus;
     return data;
   }
 

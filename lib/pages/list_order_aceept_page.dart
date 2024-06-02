@@ -41,7 +41,7 @@ class _ListOrderAceeptPageState extends State<ListOrderAceeptPage>
             {listRoute = value, _productsController.add(listRoute)}
         });
     startCountdown();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     setState(() {
       tabStatus = 0;
     });
@@ -103,7 +103,7 @@ class _ListOrderAceeptPageState extends State<ListOrderAceeptPage>
               height: double.infinity,
               alignment: Alignment.center,
               child: Text(
-                "Đã nhận",
+                "Đang nhận",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: "SF SemiBold",
@@ -127,6 +127,29 @@ class _ListOrderAceeptPageState extends State<ListOrderAceeptPage>
               alignment: Alignment.center,
               child: Text(
                 "Đang tìm",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: "SF SemiBold",
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          )),
+          Tab(
+              child: InkWell(
+            onTap: () {
+              _tabController.index = 2;
+              setState(() {
+                tabStatus = _tabController.index;
+              });
+              _pullRefresh();
+            },
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              alignment: Alignment.center,
+              child: Text(
+                "Đang treo",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: "SF SemiBold",
@@ -221,10 +244,13 @@ class _ListOrderAceeptPageState extends State<ListOrderAceeptPage>
                               .where((RouteModel document) =>
                                   (_tabController.index == 0 &&
                                       document.status == 2 &&
+                                      document.orderActionStatus !=3 &&
                                       document.shipperId.toString() ==
                                           shipperId) ||
                                   (_tabController.index == 1 &&
-                                      document.status == 1))
+                                      document.status == 1) ||
+                                  (_tabController.index == 2 &&
+                                      document.orderActionStatus == 3))
                               .map((RouteModel document) {
                             return InkWell(
                               onTap: () {
