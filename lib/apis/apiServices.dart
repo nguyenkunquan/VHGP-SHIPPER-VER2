@@ -149,7 +149,7 @@ class ApiServices {
   static Future<dynamic> getEdgeDetail(
     num id,
   ) async {
-    print('getEdgeDetail');
+    print('getEdgeDetai: ID $id');
     var messageEdgeModel = Completer<MessageEdgeModel>();
     var body;
     try {
