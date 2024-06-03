@@ -1379,20 +1379,20 @@ class _HomePageState extends State<HomePage> {
             })
         .then((value) => {
               globals.dateOnly = '${actualYear}-${actualMonth}-${actualDate}',
-              ApiServices2.getTotalDistanceByDate(
-                      shipperId, DateTime.parse(globals.dateOnly))
-                  .then((value) {
-                if (value != null) {
-                  setState(() {
-                    totalDistanceByDate = value;
-                    isLoading = false;
-                  });
-                } else {
-                  setState(() {
-                    isLoading = false;
-                  });
-                }
-              })
+            //   ApiServices2.getTotalDistanceByDate(
+            //           shipperId, DateTime.parse(globals.dateOnly))
+            //       .then((value) {
+            //     if (value != null) {
+            //       setState(() {
+            //         totalDistanceByDate = value;
+            //         isLoading = false;
+            //       });
+            //     } else {
+            //       setState(() {
+            //         isLoading = false;
+            //       });
+            //     }
+            //   })
             })
         .catchError((onError) => {
               print("onError: " + onError.toString()),
@@ -1459,20 +1459,20 @@ class _HomePageState extends State<HomePage> {
                       })
             })
         .then((value) => {
-              ApiServices2.getTotalDistanceByDate(
-                      shipperId, DateTime.parse(globals.dateOnly))
-                  .then((value) {
-                if (value != null) {
-                  setState(() {
-                    totalDistanceByDate = value;
-                    isLoading = false;
-                  });
-                } else {
-                  setState(() {
-                    isLoading = false;
-                  });
-                }
-              })
+              // ApiServices2.getTotalDistanceByDate(
+              //         shipperId, DateTime.parse(globals.dateOnly))
+              //     .then((value) {
+              //   if (value != null) {
+              //     setState(() {
+              //       totalDistanceByDate = value;
+              //       isLoading = false;
+              //     });
+              //   } else {
+              //     setState(() {
+              //       isLoading = false;
+              //     });
+              //   }
+              // })
             })
         .catchError((onError) => {
               print("onError: " + onError.toString()),
@@ -1505,20 +1505,20 @@ class _HomePageState extends State<HomePage> {
       }
     }).then((value) {
       String dayFilter = "${year}-${month}-${day}";
-      ApiServices2.getTotalDistanceByDate(
-              shipperId, DateTime.parse(globals.dateOnly))
-          .then((value) {
-        if (value != null) {
-          setState(() {
-            totalDistanceByDate = value;
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      });
+      // ApiServices2.getTotalDistanceByDate(
+      //         shipperId, DateTime.parse(globals.dateOnly))
+      //     .then((value) {
+      //   if (value != null) {
+      //     setState(() {
+      //       totalDistanceByDate = value;
+      //       isLoading = false;
+      //     });
+      //   } else {
+      //     setState(() {
+      //       isLoading = false;
+      //     });
+        // }
+      // });
     }).catchError((onError) {
       print("onError: " + onError.toString());
       setState(() {

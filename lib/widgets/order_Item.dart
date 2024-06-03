@@ -201,11 +201,6 @@ class _OrderItemState extends State<OrderItem> {
         actionType: actionType,
         image: base64Image,
     );
-    if(actionType == OrderAction.deliveryHub || actionType == OrderAction.deliveryCus) {
-      handleUpdateShipperStatus(0);
-    } else  {
-      handleUpdateShipperStatus(2);
-    }
     try {
       var response = await ApiServices.orderComplete(
         orderActionId,
@@ -215,8 +210,12 @@ class _OrderItemState extends State<OrderItem> {
       await ApiServices.updatePaymentType(widget.orderId, paymentTypeChange.toInt());
 
       if (response != null && response.statusCode == "Successful") {
-        if (actionType == OrderAction.deliveryCus) {
+        if (actionType == OrderAction.deliveryCus && actionType == OrderAction.deliveryHub) {
           globals.shippingOrderCounter -= 1;
+          await handleUpdateShipperStatus(0);
+        }
+        else {
+          await handleUpdateShipperStatus(2);
         }
         setState(() {
           widget.callback(index);
