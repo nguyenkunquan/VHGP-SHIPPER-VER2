@@ -59,9 +59,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void sendRedisLocationApi() {
     print('Number of orders that are shipping: ${globals.shippingOrderCounter.toString()}');
     if (Provider.of<AppProvider>(context, listen: false).isSwitched) {
-      ApiServices2.updateStatusShipper(0).catchError((e) {
-          print('Error update status shipper: $e');
-        });
+      // ApiServices2.updateStatusShipper(0).catchError((e) {
+      //     print('Error update status shipper: $e');
+      //   });
       print("Applifecyclestate: $_notification");
       BackgroundLocation.startLocationService().then((value) {
         globals.isActive = true;
