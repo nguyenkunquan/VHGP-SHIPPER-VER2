@@ -96,6 +96,22 @@ class _HomePageState extends State<HomePage> {
       return actualDate + " Tháng " + actualMonth;
     }
   }
+  handleUpdateShipperStatus(num status) {
+    String statusCode = "";
+    ApiServices2.updateStatusShipper(status)
+        .then((value) => {
+              statusCode = value,
+              if (statusCode == "Successful")
+                {
+                  print("Update status success"),
+                }
+              else
+                {
+                  print("Update status fail"),
+                }
+            })
+        .catchError((onError) => {print("onError: " + onError.toString())});
+  }
 
   statistical_order() {
     return Container(
@@ -1598,6 +1614,9 @@ class _HomePageState extends State<HomePage> {
                                       context
                                           .read<AppProvider>()
                                           .toogleSwitch(newValue);
+                                      if (newValue) {
+                                        handleUpdateShipperStatus(0);
+                                      }
                                     } else {
                                       Flushbar(
                                         messageText: const Center(
