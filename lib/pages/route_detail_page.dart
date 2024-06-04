@@ -912,7 +912,7 @@ class _RouteDetailPageState extends State<RouteDetailPage>
               // ),
 
               ),
-          if (widget.status == 1)
+          if (widget.status == 1 || widget.status == 4)
             Positioned(
                 bottom: 0,
                 child: Container(

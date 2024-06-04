@@ -368,9 +368,7 @@ class ApiServices {
         Uri.parse('${baseURL}/routes/${routeId}/accept?shipperId=${shipperId}'),
         headers: headers,
       );
-      print(response.statusCode.toString() + 'hoan');
       if (response.statusCode == 200) {
-        print('Hoan vip pro 200');
         // Completer<MessageEdgeModel> message = Completer<MessageEdgeModel>();
         body = convert.jsonDecode(response.body);
         // message.complete(MessageEdgeModel.fromJson(body));
