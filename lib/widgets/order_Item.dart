@@ -282,7 +282,7 @@ class _OrderItemState extends State<OrderItem> {
       ApiServices.updatePaymentType(widget.orderId, paymentTypeChange.toInt());
 
       if (response != null && response.statusCode == "Successful") {
-        if (actionType == OrderAction.deliveryCus && actionType == OrderAction.deliveryHub) {
+        if (actionType == OrderAction.deliveryCus || actionType == OrderAction.deliveryHub) {
           globals.shippingOrderCounter -= 1;
           await handleUpdateShipperStatus(0);
         }
