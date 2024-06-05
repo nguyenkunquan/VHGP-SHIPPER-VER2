@@ -835,8 +835,8 @@ class _OrderItemState extends State<OrderItem> {
 
   Widget headerDialog(num action, String phone, String name) {
     switch (action) {
-      case OrderAction.pickupStore:
-        return Row(
+    case OrderAction.pickupStore:
+      return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
@@ -858,32 +858,47 @@ class _OrderItemState extends State<OrderItem> {
                     width: 25,
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                        "https://cdn-icons-png.flaticon.com/512/1532/1532692.png"),
+                      "https://cdn-icons-png.flaticon.com/512/1532/1532692.png"),
+
                   )),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    "Nhà Hàng",
-                    style: const TextStyle(
-                        color: Color.fromRGBO(100, 100, 100, 1),
-                        fontFamily: "SF Regular",
-                        fontSize: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Nhà hàng",
+                        style: const TextStyle(
+                            color: Color.fromRGBO(100, 100, 100, 1),
+                            fontFamily: "SF Regular",
+                            fontSize: 16),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        name,
+                        style: const TextStyle(
+                            color: MaterialColors.black,
+                            fontFamily: "SF Bold",
+                            fontSize: 16),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    name,
-                    maxLines: 1,
-                    style: const TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        color: MaterialColors.black,
-                        fontFamily: "SF Bold",
-                        fontSize: 16),
+                  InkWell(
+                    onTap: () {
+                      _makePhoneCall(phone);
+                    },
+                    child: Icon(
+                      Icons.phone_in_talk,
+                      size: 24,
+                      color: Color.fromRGBO(100, 100, 100, 1),
+                    ),
                   ),
                 ],
               ),
@@ -1012,7 +1027,7 @@ class _OrderItemState extends State<OrderItem> {
                       size: 24,
                       color: Color.fromRGBO(100, 100, 100, 1),
                     ),
-                  )
+                  ),
                 ],
               ),
             )
