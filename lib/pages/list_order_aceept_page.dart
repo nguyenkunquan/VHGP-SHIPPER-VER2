@@ -244,13 +244,12 @@ class _ListOrderAceeptPageState extends State<ListOrderAceeptPage>
                               .where((RouteModel document) =>
                                   (_tabController.index == 0 &&
                                       document.status == 2 &&
-                                      document.orderActionStatus !=3 &&
                                       document.shipperId.toString() ==
                                           shipperId) ||
                                   (_tabController.index == 1 &&
                                       document.status == 1) ||
                                   (_tabController.index == 2 &&
-                                      document.orderActionStatus == 3))
+                                      document.status == 4))
                               .map((RouteModel document) {
                             return InkWell(
                               onTap: () {

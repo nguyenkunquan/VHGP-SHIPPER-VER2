@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:another_flushbar/flushbar_route.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:background_location/background_location.dart';
 
 import 'package:intl/intl.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -41,6 +43,21 @@ class _HomePageState extends State<HomePage> {
   int subtractFilter = 0;
   // MessageEdgeModelHistory messageEdgeModel = MessageEdgeModelHistory();
   EdgeModel _edgeModel = EdgeModel();
+
+  // Future<bool> isLocationPermissionGranted() async {
+  // var status = await Permission.location.isGranted;
+  // return status;
+  // }
+  Future<bool> isLocationServiceEnabled() async {
+    var flag = false;
+    await BackgroundLocation.startLocationService().then((value) async {
+      var location = await BackgroundLocation().getCurrentLocation();
+      if (location.latitude is num || location.longitude is num) {
+        flag = true;
+      }
+    });
+    return flag;
+  }
 
   void _ModalAccept(context) {
     showModalBottomSheet(
@@ -96,6 +113,7 @@ class _HomePageState extends State<HomePage> {
       return actualDate + " Tháng " + actualMonth;
     }
   }
+
   handleUpdateShipperStatus(num status) {
     String statusCode = "";
     ApiServices2.updateStatusShipper(status)
@@ -1395,20 +1413,20 @@ class _HomePageState extends State<HomePage> {
             })
         .then((value) => {
               globals.dateOnly = '${actualYear}-${actualMonth}-${actualDate}',
-            //   ApiServices2.getTotalDistanceByDate(
-            //           shipperId, DateTime.parse(globals.dateOnly))
-            //       .then((value) {
-            //     if (value != null) {
-            //       setState(() {
-            //         totalDistanceByDate = value;
-            //         isLoading = false;
-            //       });
-            //     } else {
-            //       setState(() {
-            //         isLoading = false;
-            //       });
-            //     }
-            //   })
+              ApiServices2.getTotalDistanceByDate(
+                      shipperId, DateTime.parse(globals.dateOnly))
+                  .then((value) {
+                if (value != null) {
+                  setState(() {
+                    totalDistanceByDate = value;
+                    isLoading = false;
+                  });
+                } else {
+                  setState(() {
+                    isLoading = false;
+                  });
+                }
+              })
             })
         .catchError((onError) => {
               print("onError: " + onError.toString()),
@@ -1475,20 +1493,20 @@ class _HomePageState extends State<HomePage> {
                       })
             })
         .then((value) => {
-              // ApiServices2.getTotalDistanceByDate(
-              //         shipperId, DateTime.parse(globals.dateOnly))
-              //     .then((value) {
-              //   if (value != null) {
-              //     setState(() {
-              //       totalDistanceByDate = value;
-              //       isLoading = false;
-              //     });
-              //   } else {
-              //     setState(() {
-              //       isLoading = false;
-              //     });
-              //   }
-              // })
+              ApiServices2.getTotalDistanceByDate(
+                      shipperId, DateTime.parse(globals.dateOnly))
+                  .then((value) {
+                if (value != null) {
+                  setState(() {
+                    totalDistanceByDate = value;
+                    isLoading = false;
+                  });
+                } else {
+                  setState(() {
+                    isLoading = false;
+                  });
+                }
+              })
             })
         .catchError((onError) => {
               print("onError: " + onError.toString()),
@@ -1521,20 +1539,20 @@ class _HomePageState extends State<HomePage> {
       }
     }).then((value) {
       String dayFilter = "${year}-${month}-${day}";
-      // ApiServices2.getTotalDistanceByDate(
-      //         shipperId, DateTime.parse(globals.dateOnly))
-      //     .then((value) {
-      //   if (value != null) {
-      //     setState(() {
-      //       totalDistanceByDate = value;
-      //       isLoading = false;
-      //     });
-      //   } else {
-      //     setState(() {
-      //       isLoading = false;
-      //     });
-        // }
-      // });
+      ApiServices2.getTotalDistanceByDate(
+              shipperId, DateTime.parse(globals.dateOnly))
+          .then((value) {
+        if (value != null) {
+          setState(() {
+            totalDistanceByDate = value;
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
     }).catchError((onError) {
       print("onError: " + onError.toString());
       setState(() {
@@ -1609,7 +1627,12 @@ class _HomePageState extends State<HomePage> {
                                 Switch(
                                   value:
                                       context.watch<AppProvider>().isSwitched,
-                                  onChanged: (bool newValue) {
+                                  onChanged: (bool newValue) async {
+                                    bool isEnabled =
+                                        await isLocationServiceEnabled();
+                                    if (!isEnabled) {
+                                      return;
+                                    }
                                     if (globals.shippingOrderCounter == 0) {
                                       context
                                           .read<AppProvider>()
@@ -1697,7 +1720,7 @@ class _HomePageState extends State<HomePage> {
                         Container(
                             padding:
                                 EdgeInsets.only(left: 15, right: 15, top: 15),
-                            child: Column(
+                            child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(

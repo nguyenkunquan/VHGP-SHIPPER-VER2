@@ -60,14 +60,15 @@ class ApiServices2 {
   // }
 
   static Future<void> removeLocation() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    var url = Uri.parse(
-        'https://vhgp-api.vhgp.net/api/Shipper/RemoveRedis/${user!.email}');
-    var response = await http.delete(url);
-    print(response);
-    if (response.statusCode != 200) {
-      throw Exception('Failed to remove location');
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      User? user = auth.currentUser;
+      var url = Uri.parse(
+          'https://vhgp-api.vhgp.net/api/Shipper/RemoveRedis/${user!.email}');
+      var response = await http.delete(url);
+      print('response when remove location $response.body');
+    } catch (e) {
+      print('Error removing location: $e');
     }
   }
 

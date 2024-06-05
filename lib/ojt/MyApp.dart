@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:vhgp_deli/provider/appProvider.dart';
 import './apis/apiServices.dart'; // Assuming this is where your sendLocation function is defined
@@ -106,7 +106,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     print('AppLifecycleState: $state');
 
     // inactive: không dùng app nhưng chưa chuyển sang app khác
@@ -117,9 +117,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     _notification = state; // Update the state
     if (state == AppLifecycleState.detached) {
-      print('Remove redis location');
       try {
-        ApiServices2.removeLocation();
+        await ApiServices2.removeLocation();
+        print('Remove redis location');
       } catch (e) {
         print('Error removing location: $e');
       }
