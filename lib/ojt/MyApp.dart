@@ -55,25 +55,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   //   }
   // }
 
-  Timer? locationTimer;
+  // Timer? locationTimer;
   void sendRedisLocationApi() {
-    print('Number of orders that are shipping: ${globals.shippingOrderCounter.toString()}');
+    print(
+        'Number of orders that are shipping: ${globals.shippingOrderCounter.toString()}');
     if (Provider.of<AppProvider>(context, listen: false).isSwitched) {
       // ApiServices2.updateStatusShipper(0).catchError((e) {
       //     print('Error update status shipper: $e');
       //   });
       print("Applifecyclestate: $_notification");
-      BackgroundLocation.startLocationService().then((value) {
+      BackgroundLocation.startLocationService().then((value) async {
         globals.isActive = true;
-        locationTimer = Timer.periodic(Duration(seconds: 3), (timer) async {
-          var location = await BackgroundLocation().getCurrentLocation();
-          ApiServices2.sendLocation(location.latitude!, location.longitude!);
-          ApiServices2.trackingDistance(
-              getUserId(), location.latitude!, location.longitude!);
-        });
+        // locationTimer = Timer.periodic(Duration(seconds: 3), (timer) async {
+        var location = await BackgroundLocation().getCurrentLocation();
+        ApiServices2.sendLocation(location.latitude!, location.longitude!);
+        ApiServices2.trackingDistance(
+            getUserId(), location.latitude!, location.longitude!);
+        // });
       });
     } else {
-      locationTimer?.cancel();
+      // locationTimer?.cancel();
       BackgroundLocation.stopLocationService();
 
       if (globals.isActive == true) {

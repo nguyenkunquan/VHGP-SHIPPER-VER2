@@ -44,21 +44,6 @@ class _HomePageState extends State<HomePage> {
   // MessageEdgeModelHistory messageEdgeModel = MessageEdgeModelHistory();
   EdgeModel _edgeModel = EdgeModel();
 
-  // Future<bool> isLocationPermissionGranted() async {
-  // var status = await Permission.location.isGranted;
-  // return status;
-  // }
-  Future<bool> isLocationServiceEnabled() async {
-    var flag = false;
-    await BackgroundLocation.startLocationService().then((value) async {
-      var location = await BackgroundLocation().getCurrentLocation();
-      if (location.latitude is num || location.longitude is num) {
-        flag = true;
-      }
-    });
-    return flag;
-  }
-
   void _ModalAccept(context) {
     showModalBottomSheet(
         isScrollControlled: true,
@@ -1628,9 +1613,15 @@ class _HomePageState extends State<HomePage> {
                                   value:
                                       context.watch<AppProvider>().isSwitched,
                                   onChanged: (bool newValue) async {
-                                    bool isEnabled =
-                                        await isLocationServiceEnabled();
-                                    if (!isEnabled) {
+                                    bool isLocationPermissionGranted = false;
+                                    await Permission.locationWhenInUse
+                                        .request()
+                                        .then((value) {
+                                      if (value.isGranted) {
+                                        isLocationPermissionGranted = true;
+                                      }
+                                    });
+                                    if (!isLocationPermissionGranted) {
                                       return;
                                     }
                                     if (globals.shippingOrderCounter == 0) {
