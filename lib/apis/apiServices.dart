@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert' as convert;
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:vhgp_deli/models/OrderCompleteModel.dart';
 
@@ -56,6 +57,25 @@ class ApiServices {
       print('Error with status code: ${e}');
     }
     return null;
+  }
+
+  static Future<num> checkNewRoute() async {
+    try {
+      var response = await http.get(
+        Uri.parse('${baseURL}/routes/check-new-route'),
+      );
+      
+      var body = convert.jsonDecode(response.body);
+      var count = body['newRoute'];
+      print("count:" + count.toString());
+      if (count > 0) {
+        return count;
+      }
+      return count;
+    } catch (e) {
+      print('Error with status code: ${e}');
+    }
+    return 0;
   }
 
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/routes/b6261fcf-4b85-41b5-be97-84237f956022/edges
@@ -270,16 +290,15 @@ class ApiServices {
       print(orderCompleteModel.actionType);
       // String base64Image = convert.jsonEncode(image);
       var response = await http.patch(
-        Uri.parse(
-            '$baseURL/orders/complete?orderActionId=$orderActionId'),
-            headers: headers,
-            body: convert.jsonEncode({
-              "shipperId": orderCompleteModel.shipperId,
-              "actionType": orderCompleteModel.actionType,
-              "image": orderCompleteModel.image
-            }),
+        Uri.parse('$baseURL/orders/complete?orderActionId=$orderActionId'),
+        headers: headers,
+        body: convert.jsonEncode({
+          "shipperId": orderCompleteModel.shipperId,
+          "actionType": orderCompleteModel.actionType,
+          "image": orderCompleteModel.image
+        }),
       );
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         body = convert.jsonDecode(response.body);
         messageEdgeModel.complete(MessageEdgeModel.fromJson(body));
       }
@@ -414,5 +433,18 @@ class ApiServices {
           'Failed to update payment type ${response.statusCode} ${response.body}');
     }
   }
-
+  static Future<dynamic> getOrdersByShipper() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    try {
+      var response = await http.get(
+        Uri.parse('${baseURL}/orders/shippers/${user!.email}'),
+      );
+      var body = convert.jsonDecode(response.body);
+      print(body['totalOrder']);
+    }
+    catch (e) {
+      print('Error with status code: ${e}');
+    }
+  }
 }

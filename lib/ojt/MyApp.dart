@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:vhgp_deli/apis/apiServices.dart';
 import 'package:vhgp_deli/provider/appProvider.dart';
 import './apis/apiServices.dart'; // Assuming this is where your sendLocation function is defined
 import 'package:background_location/background_location.dart';
@@ -23,6 +25,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _timer = Timer.periodic(const Duration(seconds: 20), (timer) async {
+      ApiServices.checkNewRoute().then((value) => {
+            print("value: "+ value.toString()),
+        if(value > 0) {
+          
+          AudioPlayer().setVolume(1),
+          AudioPlayer().play(AssetSource('audio/ding_126626.mp3'))
+        }
+      });
+    });
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
       print(
           'Is active: ${Provider.of<AppProvider>(context, listen: false).isSwitched}');
@@ -30,8 +42,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           _notification == AppLifecycleState.paused) {
         print('notification: $_notification');
         sendRedisLocationApi();
+        
       } else {
         sendRedisLocationApi();
+        
       }
     });
   }
