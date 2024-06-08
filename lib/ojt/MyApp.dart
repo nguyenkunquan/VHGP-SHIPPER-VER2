@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:vhgp_deli/apis/apiServices.dart';
+import 'package:vhgp_deli/models/DriverModel.dart';
 import 'package:vhgp_deli/provider/appProvider.dart';
 import './apis/apiServices.dart'; // Assuming this is where your sendLocation function is defined
 import 'package:background_location/background_location.dart';
@@ -71,6 +72,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   // Timer? locationTimer;
   void sendRedisLocationApi() {
+    DriverModel driverContext = context.read<AppProvider>().getDriverModel;
     print(
         'Number of orders that are shipping: ${globals.shippingOrderCounter.toString()}');
     if (Provider.of<AppProvider>(context, listen: false).isSwitched) {
@@ -82,7 +84,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         globals.isActive = true;
         // locationTimer = Timer.periodic(Duration(seconds: 3), (timer) async {
         var location = await BackgroundLocation().getCurrentLocation();
-        ApiServices2.sendLocation(location.latitude!, location.longitude!);
+        ApiServices2.sendLocation(location.latitude!, location.longitude!, driverContext);
         ApiServices2.trackingDistance(
             getUserId(), location.latitude!, location.longitude!);
         // });
@@ -95,6 +97,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // ApiServices2.updateStatusShipper(3).catchError((e) {
         //   print('Error update status shipper: $e');
         // });
+        globals.shipperStatus = 3;
         ApiServices2.removeLocation().catchError((e) {
           print('Error removing location: $e');
         });

@@ -3,13 +3,15 @@ import 'dart:ffi';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ansicolor/ansicolor.dart';
+import 'package:path/path.dart';
+import 'package:vhgp_deli/models/DriverModel.dart';
+import 'package:vhgp_deli/provider/appProvider.dart';
 import 'dart:convert';
 import '../utils/reuseFunc.dart';
-
 import 'package:vhgp_deli/ojt/models/order_model.dart';
-
+import '../globals.dart' as globals;
 class ApiServices2 {
-  static Future<void> sendLocation(double latitude, double longitude) async {
+  static Future<void> sendLocation(double latitude, double longitude, DriverModel driverContext) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     AnsiPen pen = AnsiPen()..green(bold: true);
@@ -23,7 +25,13 @@ class ApiServices2 {
       body: jsonEncode({
         'id': user.email,
         'latitude': '$latitude',
-        'longitude': '$longitude'
+        'longitude': '$longitude',
+        'status': globals.shipperStatus, 
+        'isActive': globals.isActive,
+        'name' : driverContext.fullName,
+        'phone' : driverContext.phone,
+        'img' : driverContext.image,
+        'carindentify' : driverContext.licensePlates,
       }),
     );
     if (response.statusCode != 200) {
@@ -31,31 +39,36 @@ class ApiServices2 {
           'Failed to update location ${response.statusCode} ${response.body}');
     }
   }
+
   static Future<dynamic> updateStatusShipper(num status) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
-    var url = Uri.parse('https://vhgp-api.vhgp.net/api/Shipper/UpdateStatusShipper/${user!.email}?status=$status');
+    var url = Uri.parse(
+        'https://vhgp-api.vhgp.net/api/Shipper/UpdateStatusShipper/${user!.email}?status=$status');
     var response = await http.patch(
       url,
       headers: {"Content-Type": "application/json"},
     );
-    if(response.statusCode != 200) {
-      throw Exception('Failed to update status: ${response.statusCode} ${response.body}');
-    }
-    else {
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to update status: ${response.statusCode} ${response.body}');
+    } else {
       print("Update status successfully");
     }
   }
-  static Future<dynamic> updateTimeOffShipper() async{
+
+  static Future<dynamic> updateTimeOffShipper() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
-    var url = Uri.parse('https://vhgp-api.vhgp.net/api/Shipper/UpdateShipperOffTime?shipperId=${user!.email}');
+    var url = Uri.parse(
+        'https://vhgp-api.vhgp.net/api/Shipper/UpdateShipperOffTime?shipperId=${user!.email}');
     var response = await http.patch(
       url,
       headers: {"Content-Type": "application/json"},
     );
-    if(response.statusCode != 200) {
-      throw Exception('Failed to update time off: ${response.statusCode} ${response.body}');
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to update time off: ${response.statusCode} ${response.body}');
     }
   }
 
@@ -175,5 +188,6 @@ class ApiServices2 {
           'Failed to get total distance ${response.statusCode} ${response.body}');
     }
     return double.parse(response.body);
+    // return null;
   }
 }

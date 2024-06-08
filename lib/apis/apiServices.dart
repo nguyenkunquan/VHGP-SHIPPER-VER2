@@ -442,9 +442,13 @@ class ApiServices {
       );
       var body = convert.jsonDecode(response.body);
       print(body['totalOrder']);
+      print(body['totalPickupOrder']);
+      print(body['totalDeliveryOrder']);
+      return body;
     }
     catch (e) {
       print('Error with status code: ${e}');
+      return null;
     }
   }
 }

@@ -1629,7 +1629,8 @@ class _HomePageState extends State<HomePage> {
                                           .read<AppProvider>()
                                           .toogleSwitch(newValue);
                                       if (newValue) {
-                                        handleUpdateShipperStatus(0);
+                                        globals.shipperStatus = 0;
+                                        handleUpdateShipperStatus(globals.shipperStatus);
                                       }
                                     } else {
                                       Flushbar(

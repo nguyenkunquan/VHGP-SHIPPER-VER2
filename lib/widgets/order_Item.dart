@@ -200,6 +200,9 @@ class _OrderItemState extends State<OrderItem> {
       actionType: actionType,
       image: base64Image,
     );
+    var totalOrder;
+    var totalPickupOrder;
+    var totalDeliveryOrder;
     try {
       var response = await ApiServices.orderComplete(
         orderActionId,
@@ -212,10 +215,31 @@ class _OrderItemState extends State<OrderItem> {
       if (response != null && response.statusCode == "Successful") {
         if (actionType == OrderAction.deliveryCus || actionType == OrderAction.deliveryHub) {
           globals.shippingOrderCounter -= 1;
-          await handleUpdateShipperStatus(0);
+          await ApiServices.getOrdersByShipper().then((value) async => {
+            if(value != null) {
+              totalOrder = value['totalOrder'],
+              totalPickupOrder = value['totalPickupOrder'],
+              totalDeliveryOrder = value['totalDeliveryOrder'],
+              if(totalOrder == 0 && totalPickupOrder == 0 && totalDeliveryOrder == 0) {
+               
+                globals.shipperStatus = 0
+              }
+              else if(totalDeliveryOrder > 0) {
+                globals.shipperStatus = 2
+              }
+              else if(totalPickupOrder > 0 && totalDeliveryOrder == 0) {
+                globals.shipperStatus = 1
+              }
+              else {
+                print("Error when update status shipper")
+              },
+              await handleUpdateShipperStatus(globals.shipperStatus)
+            }
+          });
         }
         else {
-          await handleUpdateShipperStatus(2);
+          globals.shipperStatus = 2;
+          await handleUpdateShipperStatus(globals.shipperStatus);
         }
         setState(() {
           widget.callback(index);
