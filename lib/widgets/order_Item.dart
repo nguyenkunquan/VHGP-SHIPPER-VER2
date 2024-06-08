@@ -238,7 +238,7 @@ class _OrderItemState extends State<OrderItem> {
           });
         }
         else {
-          globals.shipperStatus = 2;
+          globals.shipperStatus = 1;
           await handleUpdateShipperStatus(globals.shipperStatus);
         }
         setState(() {
